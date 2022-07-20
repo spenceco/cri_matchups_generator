@@ -8,7 +8,9 @@
     "dev": "npx webpack-dev-server --mode development",
     "start": "npx nodemon --exec npx babel-node src/server.js",
     "build": "npx webpack --mode development",
-    "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
+    "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive",
+    "push": "git push -u origin 'main'",
+    "pull": "git pull origin 'main'"
   },
   "keywords": [],
   "author": "",

@@ -45,7 +45,12 @@ module.exports = {
 			devMiddleware: {
 				publicPath: 'http://localhost:3000/dist/'
     		},
-			hot: 'only'
+			hot: 'only',
+			proxy:{
+				'/api': {
+					target: 'http://localhost:8000'
+				}
+			}
 		},
 //		plugins: [new webpack.HotModuleReplacementPlugin()]
 

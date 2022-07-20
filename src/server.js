@@ -27,21 +27,21 @@ app.get('/api/matchups', async (req, res) => {
 
 app.post('/api/matchups', async (req, res) => {
     try {
-	    console.log("start");
+	   // console.log("start");
         const client = await MongoClient.connect('mongodb://10.0.1.58:27017', { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log("client yes");
+        //console.log("client yes");
         const db = client.db('cri-matchups');
-        console.log("db yes");
-        console.log(req.body);
+        //console.log("db yes");
+        //console.log(req.body);
         const data = req.body;
         
-        console.log("data yes");
+        //console.log("data yes");
         const matchups = await db.collection('matchups').replaceOne({"season":1},{ people: data, "season": 1 },{ upsert: true });   
         //res.setHeader("Access-Control-Allow-Origin", "http://10.0.1.69:3000/");   
-        console.log("matchups yes");
+        //console.log("matchups yes");
 	    res.status(200).json(matchups ? matchups : []);
         client.close();
-        console.log("complete");
+        //console.log("complete");
     } catch (error) {
 	    //res.setHeader("Access-Control-Allow-Origin", "http://10.0.1.69:3000/");   
         res.status(500).json({ message: 'Error connecting to db2', error });
@@ -50,7 +50,7 @@ app.post('/api/matchups', async (req, res) => {
 })
 
 app.get('/dist/bundle.js', (req, res) => {
-	console.log("bundle")
+	//console.log("bundle")
 	//res.set('Content-Type', 'text/html');
     res.sendFile('/home/pi/matchups_generator/dist/bundle.js');
 });

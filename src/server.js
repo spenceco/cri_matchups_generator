@@ -6,7 +6,7 @@ import path from 'path';
 const app = express();
 
 app.use(bodyParser.json());
-app.use(express.static('/home/spencer/matchups_generator/public/'));
+app.use(express.static('/home/pi/matchups_generator/public/'));
 
 app.get('/api/matchups', async (req, res) => {
     try {
@@ -52,12 +52,12 @@ app.post('/api/matchups', async (req, res) => {
 app.get('/dist/bundle.js', (req, res) => {
 	console.log("bundle")
 	//res.set('Content-Type', 'text/html');
-    res.sendFile('/home/spencer/matchups_generator/dist/bundle.js');
+    res.sendFile('/home/pi/matchups_generator/dist/bundle.js');
 });
 
 app.get('*', (req, res) => {
 	res.set('Content-Type', 'text/html');
-    res.sendFile('/home/spencer/matchups_generator/public/index.html');
+    res.sendFile('/home/pi/matchups_generator/public/index.html');
 });
 
 

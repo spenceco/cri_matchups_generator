@@ -135,7 +135,7 @@ const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onA
 						placeholder="MM/DD/YY" />
 			
 			</DateInputContainer>
-			<div>{JSON.stringify(groups_no_duplicates)}</div>
+			<div>{JSON.stringify({[inputValue]:groups_no_duplicates})}</div>
 			<button onClick={() => {
 				if(!inputValue)
 					alert('Please enter a date for this meeting.');

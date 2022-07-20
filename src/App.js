@@ -34,7 +34,7 @@ const App = ({ onPeopleDataLoaded }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 				try{
-					await fetch('http://10.0.1.69:8000/api/matchups')
+					await fetch('/api/matchups')
 					.then(response => response.json())
 					.then(response => {
 						const peopleData = response[0].people;

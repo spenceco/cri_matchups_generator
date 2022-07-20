@@ -449,7 +449,7 @@ export const matchups = (state = initialState, action) => {
 			const postBody = JSON.stringify( newState.people.map(person => ({ ...person, alreadyMet: person.alreadyMet.map(met => met.name) }) )  );
 			try{
 				const fetchData = async () => {
-				 	const rawResponse = await fetch('http://10.0.1.69:8000/api/matchups',
+				 	const rawResponse = await fetch('/api/matchups',
 				 	{
 					    method: 'POST',
 					    headers: {

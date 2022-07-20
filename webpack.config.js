@@ -47,6 +47,6 @@ module.exports = {
     		},
 			hot: 'only'
 		},
-		plugins: [new webpack.HotModuleReplacementPlugin()]
+//		plugins: [new webpack.HotModuleReplacementPlugin()]
 
 };

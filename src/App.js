@@ -6,7 +6,7 @@ import MatchedPairsBox from './matchups/MatchedPairsBox';
 import React, { StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import { createRoot } from "react-dom/client";
-import { hot } from 'react-hot-loader';
+//import { hot } from 'react-hot-loader';
 import styled from 'styled-components';
 
 import { connect } from 'react-redux';

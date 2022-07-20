@@ -170,7 +170,7 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 					<h3>People Attending: {attending.length}</h3>
 					<Modal buttonName="Show Remaining">{
 					
-						people.map(person => <div>{person.name}: <div>{people.map(p => {
+						people.map(person => <div key={person.name}>{person.name}: <div>{people.map(p => {
 							if(person.alreadyMet.map(met => met.name).includes(p.name))
 								return;
 							return p.name + ' ';

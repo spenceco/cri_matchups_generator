@@ -1,0 +1,13 @@
+
+[Unit]
+Description=CRI 1v1s Generator
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/matchups_generator
+ExecStart=/usr/bin/npx babel-node /home/pi/matchups_generator/src/server.js
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+

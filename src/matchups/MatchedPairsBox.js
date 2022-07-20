@@ -115,7 +115,7 @@ const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onA
 	const groups_no_duplicates = Array.from(new Set(groups.map(JSON.stringify)), JSON.parse);
 	
 	const [shouldShowModal,setShouldShowModal] = useState();
-	const [inputValue, setInputValue] = useState();
+	const [inputValue, setInputValue] = useState("");
 
 	return (
 		<MatchedPairsBoxContainer>

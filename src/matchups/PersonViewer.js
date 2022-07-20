@@ -212,7 +212,7 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 						<OmitButton  onClick={(e) => {onOmitPressed(person)}}>Omit</OmitButton>
 						<Modal buttonName="Edit">
 						
-							{person.hasOwnProperty("alreadyMet") && person.alreadyMet.length ? <div>{person.name ? person.alreadyMet.map(p => <button onClick={() => onDeleteSavedMatchupPressed(person.name, p.name)}>{p.name}</button>)  : <div /> }</div> : <div>No matchups to edit.</div>}
+							{person.hasOwnProperty("alreadyMet") && person.alreadyMet.length ? <div>{person.name ? person.alreadyMet.map(p => <button key={person.name} onClick={() => onDeleteSavedMatchupPressed(person.name, p.name)}>{p.name}</button>)  : <div /> }</div> : <div>No matchups to edit.</div>}
 						</Modal>
 						<Modal buttonName="Remove">
 							<div>Remove from roster? </div>

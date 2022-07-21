@@ -15,7 +15,7 @@ const Pane = styled.div`
 
 `;
 
-export const SplitScreen = ({
+const SplitScreen = ({
 	children,
 	leftWeight = 1,
 	rightWeight = 1,
@@ -32,3 +32,5 @@ export const SplitScreen = ({
 			</Container>
 		)
 }
+
+export default SplitScreen

@@ -5,7 +5,7 @@ import MatchupsPage from './pages/MatchupsPage';
 import { UserInfoPage } from './pages/UserInfoPage';
 import React from 'react';
 
-import { PrivateRoute } from './auth/PrivateRoute';
+import { PrivateRoute } from './shared-components/PrivateRoute';
 
 export const RoutesContainer = () => {
     return (

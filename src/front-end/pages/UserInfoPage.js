@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useToken } from '../auth/useToken';
-import { useUser } from '../auth/useUser';
+import { useToken } from '../../back-end/auth/useToken';
+import { useUser } from '../../back-end/auth/useUser';
 import axios from 'axios';
 
 export const UserInfoPage = () => {

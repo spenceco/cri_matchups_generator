@@ -5,12 +5,12 @@ import { useToken } from '../../back-end/auth/useToken';
 import { useUser } from '../../back-end/auth/useUser';
 import axios from 'axios';
 
-export const UserInfoPage = () => {
+const UserInfoPage = () => {
 	
 	const user = useUser();
 	const [token ,setToken] = useToken();
 	
-	const { id, email, info } = user;
+	const { id, email, info, isVerified } = user;
 	
 	console.log(info);
     // We'll use the history to navigate the user
@@ -76,6 +76,7 @@ export const UserInfoPage = () => {
     return (
         <div className="content-container">
             <h1>Info for { email }</h1>
+            {!isVerified && <div className="fail">You wont be able to make any changes until you verify your email</div>}
             {showSuccessMessage && <div className="success">Successfully saved user data!</div>}
             {showErrorMessage && <div className="fail">Uh oh... something went wrong and we couldnt save changes</div>}
             <label>
@@ -103,3 +104,5 @@ export const UserInfoPage = () => {
         </div>
     );
 }
+
+export default UserInfoPage;

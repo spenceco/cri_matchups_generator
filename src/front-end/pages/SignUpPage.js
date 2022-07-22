@@ -20,7 +20,7 @@ export const SignUpPage = () => {
 		});
 		const { token } = response.data;
 		setToken(token);
-		navigate('/');
+		navigate('/please-verify');
 	}
 	
 	

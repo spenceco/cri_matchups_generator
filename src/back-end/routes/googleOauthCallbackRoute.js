@@ -17,7 +17,7 @@ export const googleOauthCallbackRoute = {
 		process.env.JWT_SECRET,
 		(err, token) => {
 			if (err) return res.sendStatus(500);
-			res.redirect(`https://dev.spence.codes/login?token=${token}`);
+			res.redirect(`/login?token=${token}`);
 		})
 	}
 }

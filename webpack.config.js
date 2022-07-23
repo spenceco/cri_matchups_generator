@@ -50,7 +50,10 @@ module.exports = {
 		proxy:{
 			'/api': {
 				target: 'http://localhost:8080'
-			}
+			},
+			'/auth': {
+				target: 'http://localhost:8080'
+			},
 		}
 	},
 //		plugins: [new webpack.HotModuleReplacementPlugin()]

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 export const EmailVerificationSuccess = () => {
-	const navigate = useNavigate;
+	const navigate = useNavigate();
 	
 	return (
 		<div className="content-container">

@@ -5,6 +5,8 @@ import MatchupsPage from './pages/MatchupsPage';
 import UserInfoPage from './pages/UserInfoPage';
 import PleaseVerifyEmailPage from './pages/PleaseVerifyEmailPage';
 import EmailVerificationLandingPage from './pages/EmailVerificationLandingPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import PasswordResetLandingPage from './pages/PasswordResetLandingPage';
 
 
 import { PrivateRoute } from './shared-components/PrivateRoute';
@@ -25,6 +27,10 @@ export const RoutesContainer = () => {
 					element={<EmailVerificationLandingPage />} />
 				<Route path="/please-verify"
 					element={<PleaseVerifyEmailPage />} />
+				<Route path="/forgot-password"
+					element={<ForgotPasswordPage />} />
+				<Route path="/reset-password/:passwordResetCode"
+					element={<PasswordResetLandingPage />} />
                 <Route path="/" 
 					element={<div>index page!</div>} />
             </Routes>

@@ -32,7 +32,7 @@ const RequestResumeButton = styled.button`
 `;
 
 const HeaderText = styled.h2`
-	margin: 0 0;
+	margin: 5px 5px;
 `;
 
 const Text = styled.div`
@@ -45,9 +45,9 @@ const HomePage = () => {
 	return (
 		<Container>
 			<MainPanel>
-				<HeaderText>Spencer Perkins</HeaderText>
-				<h2>Full-Stack Developer</h2>
-				<Text>"Software development can be a lot like chess - adhering to the best practices and principles allow you to advance your pieces toward a clear and concise goal. Compromise the opening and you can compromise the entire game. Build a solid framework, backed with research and practice, while considering all options and possibilities - that is the way to maximize your chances of success."</Text>
+				<HeaderText>About Me</HeaderText>
+				<Text>I am a self-taught software developer with more than 15 years experience in coding. I enjoy creating digital solutions to real problems and challenges, leveraging the massive potential of the computer to make life simpler and more enriching. I also have an interest in chess, music, mixology, and gardening.</Text>
+				<RequestResumeButton>Request Resume</RequestResumeButton>
 			</MainPanel>
 		</Container>
 	)

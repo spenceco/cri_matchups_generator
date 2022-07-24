@@ -11,7 +11,6 @@ import styled from 'styled-components';
 const destinations = [
 	{name: 'HOME', path: '/'}, 
 	{name: 'ABOUT',path: '/about'},
-	{name: 'CONTACT' , path: '/contact'},
 	{name: 'LOG IN' , path: '/login'},
 ];
 
@@ -40,7 +39,6 @@ const App = () => {
 	  	<BrowserRouter>
 		    <AppContainer>
 		    	<NavigationBar destinations={destinations} />
-
 				<RoutesContainer />
 				<Footer />
 			</AppContainer>

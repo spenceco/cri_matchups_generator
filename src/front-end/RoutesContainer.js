@@ -8,6 +8,7 @@ import EmailVerificationLandingPage from './pages/EmailVerificationLandingPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import PasswordResetLandingPage from './pages/PasswordResetLandingPage';
 import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
 
 
 import { PrivateRoute } from './shared-components/PrivateRoute';
@@ -17,6 +18,8 @@ export const RoutesContainer = () => {
         <Routes>
 			<Route path="/login"
 				element={<LogInPage />} />
+			<Route path="/about"
+				element={<AboutPage />} />
 			<Route path="/user"
 				element={<PrivateRoute><UserInfoPage /></PrivateRoute>} />
 			<Route path="/signup"

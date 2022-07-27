@@ -9,10 +9,9 @@ import MatchedPairsBox from './MatchedPairsBox';
 
 
 const AttendingPersonList = styled.div`
-    background: #eeeeee;
     border-radius: 8px;
     width: 30%;
-    min-width: 300px;
+    min-width: 325px;
     height: 600px;
     padding: 0 2px 0 2px;
 	margin: auto;
@@ -24,14 +23,14 @@ const AttendingPersonList = styled.div`
 
 
 const AttendeeContainer = styled.div`
-    background: #ddddee;
+    background: #202030;
     cursor: pointer;
     font-size: 20px;
-    color: ${props => props.person.omit ? '#bbbbbb' : 'black'};
-    width: 250px;
-    height: 25px;
+    color: ${props => props.person.omit ? '#bbbbbb' : 'white'};
+
+    min-height: 25px;
     border-radius: 8px;
-    padding: 0px;
+    padding: 3px;
     position: relative;
 	display: flex;
 	flex-shrink: 0;
@@ -45,6 +44,7 @@ const PersonViewerContainer = styled.div`
 	width: 100%;
 	display: flex;
 	justify-content: end;
+	margin-bottom: 2px;
 `;
 
 
@@ -70,26 +70,20 @@ const SubmitGroupButtonContainer = styled.div`
 `;
 
 const SubmitGroupButton = styled.button`
-	color: white;
-	border-radius: 8px;
-	border-color: white;
-	background: green;
-	height: 30px;
+
 `;
 
 const AttendeeOptionButton = styled.button `
-	font-size: 8px;
-	padding: 2px;
+
 	
 `;
 
 const CreateButton = styled.button`
-	background: #dddddd;
-	border-radius: 8px;
+
 `;
 
 const RemoveButton = styled(AttendeeOptionButton)`
-
+	
 `;
 
 const OmitButton = styled(AttendeeOptionButton)`
@@ -114,7 +108,6 @@ const AttendeesContainer = styled.div`
 	  width: 100%;
 	  flex-direction: column;
 	  overflow-y: scroll;
-	  align-items: center;
 `;
 
 const MeetingContainer = styled.div`
@@ -141,8 +134,7 @@ const NewPersonInput = styled.input`
 
 const ShowRemainingButton = styled.button`
 
-		width: 100px;
-		height: 40px;
+
 `;
 
 const TeamList = ({ people, onOmitPressed, onRemovePressed }) => {
@@ -167,7 +159,6 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 		<MeetingContainer>
 			<AttendingPersonList>
 				<HeaderContainer>
-					<h3>People Attending: {attending.length}</h3>
 					<Modal buttonName="Show Remaining">{
 					
 						people.map(person => <div key={person.name}>{person.name}: <div>{people.map(p => {
@@ -197,6 +188,7 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 					</Modal>
 					<SubmitGroupButton onClick={() => onSubmitGroupPressed()}>Submit Group</SubmitGroupButton>
 				</HeaderContainer>
+				<hr />
 				<AttendeesContainer>
 					{
 					people.map(person =>  person.matchedWith.length ? null : <AttendeeContainer
@@ -209,11 +201,12 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 						{person.name}({person.alreadyMet.length})
 					</PersonName>
 					<AttendeeOptionsContainer onClick={e => e.stopPropagation()}>
-						<OmitButton  onClick={(e) => {onOmitPressed(person)}}>Omit</OmitButton>
-						<Modal buttonName="Edit">
-						
-							{person.hasOwnProperty("alreadyMet") && person.alreadyMet.length ? <div>{person.name ? person.alreadyMet.map(p => <button key={person.name} onClick={() => onDeleteSavedMatchupPressed(person.name, p.name)}>{p.name}</button>)  : <div /> }</div> : <div>No matchups to edit.</div>}
-						</Modal>
+						<OmitButton  onClick={(e) => {console.log( person  )}}>Omit</OmitButton>
+						<Modal buttonName="Edit">{
+							(person.hasOwnProperty("alreadyMet") && person.alreadyMet.length) ? 
+								<div>{person.alreadyMet.map(p => <button key={p.name}>{p.name}</button> )  }</div> : 
+								<div>No matchups to edit.</div>
+						}</Modal>
 						<Modal buttonName="Remove">
 							<div>Remove from roster? </div>
 							<RemoveButton onClick={(e) => {onRemovePressed(person);}}>Remove</RemoveButton>

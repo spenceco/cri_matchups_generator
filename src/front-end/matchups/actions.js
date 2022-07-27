@@ -78,6 +78,7 @@ export const removeGroup = group => ({
 });
 
 export const SAVE_MEETING = 'SAVE_MEETING';
-export const saveMeeting = () => ({
+export const saveMeeting = people => ({
 	type: SAVE_MEETING,
+	payload: people,
 });

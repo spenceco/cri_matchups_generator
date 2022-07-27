@@ -18,17 +18,23 @@ const TextContainer = styled.div`
 	margin: auto;
 `;
 
-const Text = styled.div`
+const TextStyle = styled.div`
 	color: white;
 	margin: auto;
-	margin-right: 15px;
-	margin-left: 15px;
+	font-weight: bold;
 `;
 
 
 //const navigate = useNavigate();
 
-const Pipe = () => <Text>|</Text>;
+const PipeContainer = styled.span`
+	margin-right: 30px;
+	margin-left: 30px;
+	color: white;
+	font-weight: bold;
+`;
+
+
 
 
 const Footer = () => {
@@ -36,10 +42,10 @@ const Footer = () => {
 	return (
 		<Container>
 			<TextContainer>
-			<Text>© 2022 Spencer Perkins</Text><Pipe />
-				<Text>spencerperkinsATL@gmail.com</Text><Pipe />
-				<Text>(404)-910-3744</Text><Pipe />
-				<Text>www.linkedin.com/in/spencermperkins</Text>
+				<TextStyle>© 2022 Spencer Perkins</TextStyle><PipeContainer>|</PipeContainer>
+				<TextStyle>spencerperkinsATL@gmail.com</TextStyle><PipeContainer>|</PipeContainer>
+				<TextStyle>(404)-910-3744</TextStyle><PipeContainer>|</PipeContainer>
+				<TextStyle>www.linkedin.com/in/spencermperkins</TextStyle>
 			</TextContainer>
 		</Container>
 	)

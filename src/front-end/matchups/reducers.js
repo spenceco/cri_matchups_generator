@@ -79,9 +79,7 @@ export const matchups = (state = initialState, action) => {
 		}
 		
 		case LOAD_MATCHUPS: {
-			console.log("LOADING MATCHUPS:");
-			console.log(payload);
-			return { ...state, people: payload.map(person => ({ ...person, alreadyMet: person.alreadyMet.map(met => ({"name":met}) )       }) ) };
+			return { ...state, people: payload };
 		}
 		
 
@@ -438,39 +436,13 @@ export const matchups = (state = initialState, action) => {
 		}
 		
 		case SAVE_MEETING: {
+			//console.log(payload);
 			const newState = {
 				...state,
-				people: state.people.map(person => {
-					const matchedWith = person.matchedWith.filter(matched_person => matched_person).filter(matched_person => matched_person.name !== person.name);
-					return { ...person, alreadyMet: person.alreadyMet.concat(matchedWith.map(matched_person => {return {name:matched_person.name}})), matchedWith: [], omit: false}
-				})
+				people: payload,
 			};
 			
-			const postBody = JSON.stringify( newState.people.map(person => ({ ...person, alreadyMet: person.alreadyMet.map(met => met.name) }) )  );
-			try{
-				const fetchData = async () => {
-				 	const rawResponse = await fetch('/api/matchups',
-				 	{
-					    method: 'POST',
-					    headers: {
-					      'Accept': 'application/json',
-					      'Content-Type': 'application/json'
-					    },
-					    body: postBody,
-					});
-					const body = await rawResponse.json();
-					console.log(body);
-				};
-				fetchData();
-						
-			} catch(e) {
-				console.log({"error":e});
-			}
-
-			//const content = rawResponse.json();
-			//console.log(postBody);
-			
- 
+			console.log(newState);
 			
 			return newState;
 		}

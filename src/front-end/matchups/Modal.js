@@ -19,6 +19,7 @@ const ModalBody = styled.div`
 	margin: 10% auto;
 	padding: 20px;
 	width: 50%;
+	color: black;
 `;
 
 const ModalCloseButton = styled.button`
@@ -27,6 +28,17 @@ const ModalCloseButton = styled.button`
 	width: 20px;
 	height: 20px;
 	
+`;
+
+const ModalOpenButton = styled.button`
+	background-color: #7D7461;
+    border-radius: 8px;
+    min-height: 20px;
+    display: block;
+    font-size: 16px;
+    padding: 8px;
+    color: white;
+    border-color: #635c51;
 `;
 
 const Modal = ({ buttonName="Show Modal", children }) => {

@@ -21,13 +21,26 @@ hr {
 }
 
 button, input {
+	background-color: #7D7461;
     border-radius: 8px;
-    box-sizing: border-box;
+    min-height: 20px;
     display: block;
     font-size: 16px;
-    margin: 8px 0;
-    padding: 8px;
+    padding: 5px;
+    color: white;
     width: 100%;
+}
+
+::placeholder {
+	color: #aaaaaa;
+	opacity: 1;
+}
+
+hr {
+	background-color: #39304A;
+	height: 1px;
+	border: none;
+	margin: 10px 10px;
 }
 
 input {
@@ -35,7 +48,7 @@ input {
 }
 
 button {
-    border: 1px solid black;
+    border: 1px solid #635c51;
     cursor: pointer;
 }
 
@@ -50,8 +63,8 @@ button {
 
 .content-container {
     background-color: rgba(0,0,0,0.6);
-    border: 2px solid white;
-    border-radius: 5px;
+    border: none;
+    border-radius: 8px;
     min-width: 300px;
     max-width: 800px;
     padding: 4px 32px 32px 32px;

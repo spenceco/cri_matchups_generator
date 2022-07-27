@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useToken } from '../../back-end/auth/useToken';
+import { useToken } from '../../auth/useToken';
 import axios from 'axios';
 
 export const SignUpPage = () => {

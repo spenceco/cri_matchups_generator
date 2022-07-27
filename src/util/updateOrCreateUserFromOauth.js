@@ -1,4 +1,4 @@
-import { getDbConnection } from '../db';
+import { getDbConnection } from '../back-end/db';
 
 export const updateOrCreateUserFromOauth = async ({ oauthUserInfo }) => {
 	const {

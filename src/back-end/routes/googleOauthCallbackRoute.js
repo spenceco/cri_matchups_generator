@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { getGoogleUser } from '../util/getGoogleUser';
-import { updateOrCreateUserFromOauth } from '../util/updateOrCreateUserFromOauth';
+import { getGoogleUser } from '../../util/getGoogleUser';
+import { updateOrCreateUserFromOauth } from '../../util/updateOrCreateUserFromOauth';
 
 export const googleOauthCallbackRoute = {
 	path: '/auth/google/callback',

@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useToken } from '../../back-end/auth/useToken';
-import { useQueryParams } from '../util/useQueryParams';
+import { useToken } from '../../auth/useToken';
+import { useQueryParams } from '../../util/useQueryParams';
+import styled from 'styled-components';
 
-export const LogInPage = () => {
+const GoogleSignInButton = styled.img`
+	width: 75%;
+
+`;
+
+const ButtonContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
+export const LogInPage = ({ setIsLoggedIn }) => {
 	const [,setToken] = useToken();
 	const [errorMessage,setErrorMessage] = useState('');
 	const [emailValue,setEmailValue] = useState('');
@@ -18,6 +30,7 @@ export const LogInPage = () => {
 	useEffect(() => {
 		if (oauthToken) {
 			setToken(oauthToken);
+			setIsLoggedIn(true);
 			navigate('/user');
 		}
 	},[oauthToken, setToken, navigate]);
@@ -65,17 +78,21 @@ export const LogInPage = () => {
 				placeholder="password"
 				type="password" />
 			<hr />
-			<button
-				disabled={!emailValue || !passwordValue} 
-				onClick={onLogInClicked}>Log In</button>
-			<button
-				onClick={() => navigate('/forgot-password')}>Forgot your password?</button>
-			<button
-				onClick={() => navigate('/signup')}>Dont have an account? Sign up</button>
-			<button
-				disabled={!googleOauthUrl}
-				onClick={() => { window.location.href = googleOauthUrl }}
-			>Log in with Google</button>
+			<ButtonContainer>
+				<button
+					disabled={!emailValue || !passwordValue} 
+					onClick={onLogInClicked}>Log In</button>
+				<button
+					onClick={() => navigate('/forgot-password')}>Forgot your password?</button>
+				<button
+					onClick={() => navigate('/signup')}>Dont have an account? Sign up</button>
+				<GoogleSignInButton
+					disabled={!googleOauthUrl}
+					src="/images/btn_google_signin_light_focus_web@2x.png"
+					onClick={() => { window.location.href = googleOauthUrl }}
+				/>
+			</ButtonContainer>
+
 		</div>
 	)
 }

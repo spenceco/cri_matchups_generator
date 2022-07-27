@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { removeGroup, saveMeeting, generateMatchups, clearMatchups } from './actions';
 import { getPeople } from './selectors';
 import  Modal  from './Modal';
 import ControlledModal from './ControlledModal';
+import { useUser } from '../../auth/useUser';
+import { useToken } from '../../auth/useToken';
 
 const MatchedPairsBoxContainer = styled.div`
 
-    background: #ddddee;
+
 
     font-size: 20px;
     height: 600px;
@@ -116,7 +118,10 @@ const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onA
 	
 	const [shouldShowModal,setShouldShowModal] = useState();
 	const [inputValue, setInputValue] = useState("");
-
+	
+	const user = useUser();
+	const { id } = user;
+	const [token ,setToken] = useToken();
 	return (
 		<MatchedPairsBoxContainer>
 		<ControlledModal 
@@ -140,13 +145,34 @@ const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onA
 				if(!inputValue)
 					alert('Please enter a date for this meeting.');
 				else{
-					onSaveClicked();
-					setInputValue('');
-					setShouldShowModal(false);	
+					//const peopleData = people.map(person => ({ ...person, alreadyMet: person.alreadyMet.map(met => met.name) }) )  ;
+					//console.log(postBody);
+					try{
+						const fetchData = async () => {
+						 	const rawResponse = await fetch(`/api/matchups/${id}`,
+						 	{
+							    method: 'POST',
+							    headers: {
+							      'Accept': 'application/json',
+							      'Content-Type': 'application/json',
+							      'Authorization': `Bearer ${token}`,
+							    },
+							    body: JSON.stringify(people),
+							});
+							const body = await rawResponse.json();
+							onSaveClicked(body);
+							setInputValue('');
+							setShouldShowModal(false);
+						};
+						fetchData();
+								
+					} catch(e) {
+						console.log({"error":e});
+					}
+
 				}
 			}}>Save</button>
 		</ControlledModal>
-		<HeaderContainer><Header>Groups:</Header></HeaderContainer>
 		<AutoButton onClick={() => onAutoClicked()}>Auto</AutoButton>
 		<SaveButton onClick={() => setShouldShowModal(true)}>Save</SaveButton>
 		<ClearButton onClick={() => onClearClicked()}>Clear</ClearButton>
@@ -164,7 +190,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onRemoveClicked: group => dispatch(removeGroup(group)),
-	onSaveClicked: () => dispatch(saveMeeting()),
+	onSaveClicked: people => dispatch(saveMeeting(people)),
 	onAutoClicked: () => dispatch(generateMatchups()),
 	onClearClicked: () => dispatch(clearMatchups()),
 });

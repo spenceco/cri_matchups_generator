@@ -2,7 +2,7 @@ import { getDbConnection } from '../db';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
-import { sendEmail } from '../util/sendEmail';
+import { sendEmail } from '../../util/sendEmail';
 
 
 export const signUpRoute = {

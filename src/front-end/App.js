@@ -1,18 +1,15 @@
-import React, { StrictMode } from 'react';
+import React, { StrictMode, useState, useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { RoutesContainer } from './RoutesContainer';
-
-import NavigationBar from './shared-components/NavigationBar';
-import Footer from './shared-components/Footer';
+import { useUser } from '../auth/useUser';
+import NavigationBar from './layout/NavigationBar';
+import Footer from './layout/Footer';
 
 import styled from 'styled-components';
 
 
-const destinations = [
-	{name: 'HOME', path: '/'}, 
-	{name: 'ABOUT',path: '/about'},
-	{name: 'LOG IN' , path: '/login'},
-];
+
+
 
 const AppContainer = styled.div`
 	display: flex;
@@ -33,13 +30,25 @@ const BackgroundImage = styled.img`
 	height: 50%;
 `;
 const App = () => {
+	const user = useUser();
+	const [isLoggedIn,setIsLoggedIn] = useState(false);
+	
+	useEffect(() => {
+		if(user){
+			console.log(user);
+			setIsLoggedIn(true);	
+		}
+		else
+			console.log('no user');
+	},[])
+
 	
 	return (
 	<StrictMode>
 	  	<BrowserRouter>
 		    <AppContainer>
-		    	<NavigationBar destinations={destinations} />
-				<RoutesContainer />
+		    	<NavigationBar isLoggedIn={isLoggedIn} setIsLoggedIn={(bool) => setIsLoggedIn(bool)} />
+				<RoutesContainer setIsLoggedIn={(bool) => setIsLoggedIn(bool)} />
 				<Footer />
 			</AppContainer>
 		</BrowserRouter>

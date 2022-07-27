@@ -11,13 +11,13 @@ import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 
 
-import { PrivateRoute } from './shared-components/PrivateRoute';
+import { PrivateRoute } from '../auth/PrivateRoute';
 
-export const RoutesContainer = () => {
+export const RoutesContainer = ({ setIsLoggedIn }) => {
     return (
         <Routes>
 			<Route path="/login"
-				element={<LogInPage />} />
+				element={<LogInPage setIsLoggedIn={setIsLoggedIn}/>} />
 			<Route path="/about"
 				element={<AboutPage />} />
 			<Route path="/user"

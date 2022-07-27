@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import { useToken } from '../../back-end/auth/useToken';
-import { useUser } from '../../back-end/auth/useUser';
+import { useToken } from '../../auth/useToken';
+import { useUser } from '../../auth/useUser';
 import axios from 'axios';
 
 const UserInfoPage = () => {
@@ -60,11 +60,6 @@ const UserInfoPage = () => {
 	        setShowErrorMessage(true);
         }
     }
-
-    const logOut = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    }
     
     const resetValues = () => {
         setFavoriteFood(info.favoriteFood);
@@ -100,7 +95,6 @@ const UserInfoPage = () => {
             <hr />
             <button onClick={saveChanges}>Save Changes</button>
             <button onClick={resetValues}>Reset Values</button>
-            <button onClick={logOut}>Log Out</button>
         </div>
     );
 }

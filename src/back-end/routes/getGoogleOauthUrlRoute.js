@@ -1,4 +1,4 @@
-import { getGoogleOauthUrl } from '../util/getGoogleOauthUrl';
+import { getGoogleOauthUrl } from '../../util/getGoogleOauthUrl';
 
 export const getGoogleOauthUrlRoute = {
 	path: '/auth/google/url',

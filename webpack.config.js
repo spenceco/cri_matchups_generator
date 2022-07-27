@@ -6,6 +6,11 @@ module.exports = {
 	mode: 'development',
 	module: {
 		rules: [
+		  {
+		    test: /\.js$/,
+		    enforce: 'pre',
+		    use: ['source-map-loader'],
+		  },
 			{
 				test: /\.(js|jsx)$/,
 				exclude: /(node_modules)/,
@@ -39,9 +44,12 @@ module.exports = {
 	      // watch: {} (options for the `watch` option you can find https://github.com/paulmillr/chokidar)
 	      //watch: true,
 	    },
+	    
+	    allowedHosts: ['dev.spence.codes',],
 	    //disableHostCheck: true,
 		port: 3000,
 		allowedHosts: "all",
+		host: "0.0.0.0",
 		devMiddleware: {
 			publicPath: 'http://localhost:3000/dist/'
 		},
@@ -54,6 +62,11 @@ module.exports = {
 			'/auth': {
 				target: 'http://localhost:8080'
 			},
+
+
+		},
+		client: {
+			webSocketURL: 'auto://0.0.0.0:0/ws',
 		}
 	},
 //		plugins: [new webpack.HotModuleReplacementPlugin()]

@@ -1,16 +1,25 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useToken } from '../../auth/useToken';
 import { useUser } from '../../auth/useUser';
 import axios from 'axios';
+import { currentUserContext } from '../App';
 
 const UserInfoPage = () => {
 	
 	const user = useUser();
 	const [token ,setToken] = useToken();
+	const { setCurrentUser } = useContext(currentUserContext);
+	
 	
 	const { id, email, info, isVerified } = user;
+	
+	useEffect(() => {
+		setCurrentUser(user);
+	},[])
+
+	
 	
 	console.log(info);
     // We'll use the history to navigate the user

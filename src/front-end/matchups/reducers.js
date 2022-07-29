@@ -12,6 +12,7 @@ import { 	OMIT_PERSON,
 			SAVE_MEETING,
 			DELETE_SAVED_MATCHUP,
 			LOAD_MATCHUPS,
+			SET_DATE,
 } from './actions.js';
 
 import { getPeople, getAllOtherPeople } from './selectors'
@@ -37,6 +38,7 @@ const ppl = [	'Amy F.', 'Angela K.','Beth R.','Brian C.','Brooke G.','Caroline L
 
 const initialState = {
 	selected: [],
+	date: null,
 	people:ppl.map(person_name => {
 		return {
 			name: person_name,
@@ -82,7 +84,9 @@ export const matchups = (state = initialState, action) => {
 			return { ...state, people: payload };
 		}
 		
-
+		case SET_DATE: {
+			return { ...state, date: payload };
+		}
 
 
 		case CREATE_PERSON: {
@@ -256,7 +260,7 @@ export const matchups = (state = initialState, action) => {
 							return false;
 						return true;
 					})
-					console.log(potential_extra_partners)
+					//console.log(potential_extra_partners)
 					if(potential_extra_partners.length)
 						result.push(chooseRandomArrayElements(potential_extra_partners)[0]);
 				}
@@ -354,7 +358,7 @@ export const matchups = (state = initialState, action) => {
 			var times_shuffled = 0;
 			
 				
-			console.log("start while");
+			//console.log("start while");
 			while(times_shuffled < 100){
 			//for(let i=0;i<100;i++){
 				//const unmatched_people = new_state.people.filter(person => !person.matchedWith.length);
@@ -368,7 +372,6 @@ export const matchups = (state = initialState, action) => {
 
 
 				const group = pickGroupMembers(new_state);
-				console.log(group);
 				if(group == undefined || !group.length){//cannot read properties of undefined -- fix this
 					//console.log("no group");
 					const swings = getSwing(new_state);	

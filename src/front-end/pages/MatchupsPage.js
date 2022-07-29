@@ -6,8 +6,13 @@ import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
 import { connect } from 'react-redux';
 import { loadMatchups } from '../matchups/actions';
+import ActionBar from '../matchups/ActionBar';
+
+
 
 import styled from 'styled-components';
+
+
 
 const Container = styled.div`
 	background-color: #B0A990;
@@ -17,7 +22,9 @@ const Container = styled.div`
 `;
 
 
-const MatchupsPage = ({ onPeopleDataLoaded }) => {
+
+
+const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, people, date }) => {
 	
 	const user = useUser();
 	const { id } = user;
@@ -46,6 +53,7 @@ const MatchupsPage = ({ onPeopleDataLoaded }) => {
 
 	return (
 		<Container>
+			<ActionBar onSaveClicked={onSaveClicked} onClearClicked={onClearClicked} date={date} people={people} />
 			<SplitScreen leftWeight={1} rightWeight={1}>
 				<PersonViewer />
 				<MatchedPairsBox />
@@ -56,7 +64,14 @@ const MatchupsPage = ({ onPeopleDataLoaded }) => {
 
 const mapDispatchToProps = dispatch => ({
 	onPeopleDataLoaded: peopleData => dispatch(loadMatchups(peopleData)),
+	onSaveClicked: people => dispatch(saveMeeting(people)),
+	onClearClicked: () => dispatch(clearMatchups()),
+});
+
+const mapStateToProps = state => ({
+	date: state.matchups.date,
+	people: state.matchups.people,
 });
 
 
-export default connect(null,mapDispatchToProps)(MatchupsPage);
+export default connect(mapStateToProps,mapDispatchToProps)(MatchupsPage);

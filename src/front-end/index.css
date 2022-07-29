@@ -21,7 +21,6 @@ hr {
 }
 
 button, input {
-	background-color: #7D7461;
     border-radius: 8px;
     min-height: 20px;
     display: block;
@@ -45,11 +44,14 @@ hr {
 
 input {
     border: 1px solid black;
+    background-color: white;
+    color: black;
 }
 
 button {
     border: 1px solid #635c51;
     cursor: pointer;
+    background-color: #7D7461;
 }
 
 .page-container {

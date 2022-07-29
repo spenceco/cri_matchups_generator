@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-
-
+import { useContext, useEffect } from 'react';
+import { currentUserContext } from '../App';
+import { useUser } from '../../auth/useUser';
+import { useToken } from '../../auth/useToken';
 
 const Container = styled.div`
 	width: 100%;
@@ -29,21 +31,29 @@ const NavigationBarButton = styled.div`
 
 
 
-const NavigationBar = ({ isLoggedIn, setIsLoggedIn }) => {
+const NavigationBar = () => {
+	const user = useUser();
 	const navigate = useNavigate();
-	
+	const { currentUser, setCurrentUser } = useContext(currentUserContext);
     const logOut = () => {
-	    setIsLoggedIn(false);
         localStorage.removeItem('token');
+        setCurrentUser(null);
         navigate('/login');
     }
+   
+    useEffect(() => {
+	    console.log('navigate');
+	    console.log(user);
+	   // setCurrentUser(user);
+    },[navigate]);
+    //console.log(currentUser);
 	
 
 	return (
 		<Container>
 			<Link to="/"><NavigationBarButton>HOME</NavigationBarButton></Link>
 			<Link to="/about"><NavigationBarButton>ABOUT</NavigationBarButton></Link>
-			{isLoggedIn ? <NavigationBarButton onClick={logOut}>LOG OUT</NavigationBarButton> : 
+			{currentUser ? <NavigationBarButton onClick={logOut}>LOG OUT ({currentUser.email})</NavigationBarButton> : 
 					<Link to="/login"><NavigationBarButton>LOG IN</NavigationBarButton></Link>
 			}	
 	

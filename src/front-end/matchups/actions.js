@@ -4,6 +4,13 @@ export const loadMatchups = matchups => ({
 	payload: matchups,
 });
 
+export const SET_DATE = 'SET_DATE';
+export const setDate = date => ({
+	type: SET_DATE,
+	payload: date,
+});
+
+
 export const OMIT_PERSON = 'OMIT_PERSON';
 export const omitPerson = person => ({
 	type: OMIT_PERSON,

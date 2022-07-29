@@ -1,4 +1,4 @@
-import React, { StrictMode, useState, useEffect } from 'react';
+import React, { StrictMode, useState, useEffect, createContext } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { RoutesContainer } from './RoutesContainer';
 import { useUser } from '../auth/useUser';
@@ -8,6 +8,8 @@ import Footer from './layout/Footer';
 import styled from 'styled-components';
 
 
+
+export const currentUserContext = createContext(); 
 
 
 
@@ -30,29 +32,23 @@ const BackgroundImage = styled.img`
 	height: 50%;
 `;
 const App = () => {
-	const user = useUser();
-	const [isLoggedIn,setIsLoggedIn] = useState(false);
+	const [currentUser,setCurrentUser] = useState(useUser());
 	
-	useEffect(() => {
-		if(user){
-			console.log(user);
-			setIsLoggedIn(true);	
-		}
-		else
-			console.log('no user');
-	},[])
+
 
 	
 	return (
-	<StrictMode>
+
 	  	<BrowserRouter>
-		    <AppContainer>
-		    	<NavigationBar isLoggedIn={isLoggedIn} setIsLoggedIn={(bool) => setIsLoggedIn(bool)} />
-				<RoutesContainer setIsLoggedIn={(bool) => setIsLoggedIn(bool)} />
-				<Footer />
-			</AppContainer>
+	  		<currentUserContext.Provider value={{ currentUser, setCurrentUser }} >
+			    <AppContainer>
+			    	<NavigationBar />
+					<RoutesContainer />
+					<Footer />
+				</AppContainer>
+			</currentUserContext.Provider>
 		</BrowserRouter>
-	</StrictMode>
+
 )};
 
 

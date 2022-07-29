@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { omitPerson, editPerson, createPerson, selectPerson, selectPerson2, submitGroup, removePerson, resetDefaultMatchups, deleteSavedMatchup } from './actions';
+import { omitPerson, editPerson, createPerson, selectPerson, selectPerson2, submitGroup, removePerson, resetDefaultMatchups, generateMatchups, setDate } from './actions';
 import { getPeople, getAttendingPeople, getMatchedPeople } from './selectors';
 import Modal from './Modal';
 
 import MatchedPairsBox from './MatchedPairsBox';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import { MdOutlineModeEditOutline } from 'react-icons/md';
+import { FaRegEye } from 'react-icons/fa';
+import YesNo from './YesNo';
+
+
+import EditPersonMenu from '../matchups/EditPersonMenu';
+
 
 
 const AttendingPersonList = styled.div`
@@ -27,7 +35,7 @@ const AttendeeContainer = styled.div`
     cursor: pointer;
     font-size: 20px;
     color: ${props => props.person.omit ? '#bbbbbb' : 'white'};
-
+	margin-top: 2px;
     min-height: 25px;
     border-radius: 8px;
     padding: 3px;
@@ -78,9 +86,7 @@ const AttendeeOptionButton = styled.button `
 	
 `;
 
-const CreateButton = styled.button`
 
-`;
 
 const RemoveButton = styled(AttendeeOptionButton)`
 	
@@ -98,8 +104,6 @@ const EditButton = styled(AttendeeOptionButton)`
 const HeaderContainer = styled.div`
 	width : 100%;
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
 `;
 
 const AttendeesContainer = styled.div`
@@ -124,13 +128,10 @@ const PersonName = styled.div`
 const AttendeeOptionsContainer = styled.div`
 	display: flex;
 	justify-content: end;
+
 `;
 
 
-
-const NewPersonInput = styled.input`
-	
-`;
 
 const ShowRemainingButton = styled.button`
 
@@ -152,43 +153,25 @@ const TeamList = ({ people, onOmitPressed, onRemovePressed }) => {
 	);
 }
 
-const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPressed, onCreatePressed, onRemovePressed, onOmitPressed, onselectPressed, onResetPressed, onDeleteSavedMatchupPressed}) => {
-	const [inputValue, setInputValue] = useState('');
+const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPressed, onCreatePressed, onRemovePressed, onOmitPressed, onselectPressed, onResetPressed, onDeleteSavedMatchupPressed, onAutoPressed, onSetDate }) => {
+	
+	const [personBeingEdited,setPersonBeingEdited] = useState(false);
+
+	
+
+	
 	return (
 		<PersonViewerContainer>	
+		<EditPersonMenu onRequestClose={() => setPersonBeingEdited(null)} person={personBeingEdited} />
 		<MeetingContainer>
 			<AttendingPersonList>
 				<HeaderContainer>
-					<Modal buttonName="Show Remaining">{
-					
-						people.map(person => <div key={person.name}>{person.name}: <div>{people.map(p => {
-							if(person.alreadyMet.map(met => met.name).includes(p.name))
-								return;
-							return p.name + ' ';
-						})}</div></div>)
-					}
-					</Modal>
-					<Modal buttonName="Reset">
-						<div>Are you sure you want to reset matchup data?</div>
-						<Button onClick={() => onResetPressed()}>Reset</Button>
-					</Modal>
-					
-					<Modal buttonName="Add New">
-						<NewPersonInput
-								name="new_person"
-								type="text"
-								value={inputValue}
-								onChange={e => setInputValue(e.target.value)}
-								placeholder="Type your new person name here" />
-						<CreateButton onClick={() => {
-							onCreatePressed(inputValue);
-							setInputValue('');
-						}}>Add New</CreateButton>
-					
-					</Modal>
-					<SubmitGroupButton onClick={() => onSubmitGroupPressed()}>Submit Group</SubmitGroupButton>
+
+					<div style={ {display:'flex',flexDirection:'flex-end'} }>
+
+					</div>
 				</HeaderContainer>
-				<hr />
+
 				<AttendeesContainer>
 					{
 					people.map(person =>  person.matchedWith.length ? null : <AttendeeContainer
@@ -201,16 +184,11 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 						{person.name}({person.alreadyMet.length})
 					</PersonName>
 					<AttendeeOptionsContainer onClick={e => e.stopPropagation()}>
-						<OmitButton  onClick={(e) => {console.log( person  )}}>Omit</OmitButton>
-						<Modal buttonName="Edit">{
-							(person.hasOwnProperty("alreadyMet") && person.alreadyMet.length) ? 
-								<div>{person.alreadyMet.map(p => <button key={p.name}>{p.name}</button> )  }</div> : 
-								<div>No matchups to edit.</div>
-						}</Modal>
-						<Modal buttonName="Remove">
-							<div>Remove from roster? </div>
-							<RemoveButton onClick={(e) => {onRemovePressed(person);}}>Remove</RemoveButton>
-						</Modal>
+						<FaRegEye  style={ { width: '25px', height: 'auto' } } alt="Omit from Meeting" onClick={() => onOmitPressed(person)} />
+						<MdOutlineModeEditOutline style={ { width: '25px', height: 'auto' } } alt="Edit Team Member" onClick={ () => setPersonBeingEdited(person) } />
+						<YesNo element={<RiDeleteBin6Line style={ { width: '25px', height: 'auto' } } alt="Delete Team Member" /> } task={ () => onRemovePressed(person) }>
+							<span>Are you sure you want to remove {person.name} from the team?</span>
+						</YesNo>
 					</AttendeeOptionsContainer>
 					</AttendeeContainer> )}
 				</AttendeesContainer>
@@ -231,12 +209,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onRemovePressed: name => dispatch(removePerson(name)),
+	onAutoPressed: () => dispatch(generateMatchups()),
 	onOmitPressed: name => dispatch(omitPerson(name)),
 	onselectPressed: person => dispatch(selectPerson2(person)),
 	onResetPressed: () => dispatch(resetDefaultMatchups()),
 	onSubmitGroupPressed: () => dispatch(submitGroup()),
 	onCreatePressed: person_name => dispatch(createPerson(person_name)),
-	onDeleteSavedMatchupPressed: (first_person, second_person) => dispatch(deleteSavedMatchup(first_person, second_person)),
+	onSetDate: date => dispatch(setDate(date)),
 });
 
 

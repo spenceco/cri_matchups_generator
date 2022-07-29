@@ -13,11 +13,11 @@ import AboutPage from './pages/AboutPage';
 
 import { PrivateRoute } from '../auth/PrivateRoute';
 
-export const RoutesContainer = ({ setIsLoggedIn }) => {
+export const RoutesContainer = () => {
     return (
         <Routes>
 			<Route path="/login"
-				element={<LogInPage setIsLoggedIn={setIsLoggedIn}/>} />
+				element={<LogInPage />} />
 			<Route path="/about"
 				element={<AboutPage />} />
 			<Route path="/user"
@@ -25,7 +25,7 @@ export const RoutesContainer = ({ setIsLoggedIn }) => {
 			<Route path="/signup"
 				element={<SignUpPage />} />
 			<Route path="/matchups"
-				element={<MatchupsPage />} />
+				element={<PrivateRoute><MatchupsPage /></PrivateRoute>} />
 			<Route path="/verify-email/:verificationString"
 				element={<EmailVerificationLandingPage />} />
 			<Route path="/please-verify"

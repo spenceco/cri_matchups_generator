@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useToken } from '../../auth/useToken';
+import { useUser } from '../../auth/useUser';
 import { useQueryParams } from '../../util/useQueryParams';
 import styled from 'styled-components';
+import { currentUserContext } from '../App';
 
 const GoogleSignInButton = styled.img`
 	width: 75%;
@@ -16,21 +18,22 @@ const ButtonContainer = styled.div`
 	align-items: center;
 `;
 
-export const LogInPage = ({ setIsLoggedIn }) => {
+export const LogInPage = () => {
 	const [,setToken] = useToken();
 	const [errorMessage,setErrorMessage] = useState('');
 	const [emailValue,setEmailValue] = useState('');
 	const [passwordValue,setPasswordValue] = useState('');
-	
 	const [googleOauthUrl, setGoogleOauthUrl] = useState('');
 	const { token: oauthToken } = useQueryParams();
+	const user = useUser();
 	
 	const navigate = useNavigate();
 	
 	useEffect(() => {
 		if (oauthToken) {
 			setToken(oauthToken);
-			setIsLoggedIn(true);
+			console.log("would set: ");
+			console.log(user);
 			navigate('/user');
 		}
 	},[oauthToken, setToken, navigate]);
@@ -38,6 +41,7 @@ export const LogInPage = ({ setIsLoggedIn }) => {
 	useEffect(() => {
 		const loadOauthUrl = async () => {
 			try {
+				//console.log('LOGGING IN WITH OAUTH');
 				const response = await axios.get('/auth/google/url');
 				const { url } = response.data;
 				setGoogleOauthUrl(url);

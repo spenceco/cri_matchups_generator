@@ -4,7 +4,7 @@ import { MongoClient } from 'mongodb';
 import { ObjectID } from 'mongodb';
 import { getDbConnection } from '../db';
 import jwt from 'jsonwebtoken';
-
+import { sendEmail } from '../../util/sendEmail';
 
 
 var router = express.Router();
@@ -75,6 +75,8 @@ export const saveMatchupsRoute = {
 		const { authorization } = req.headers;
 		const { userId } = req.params;
 		const data = req.body;
+		
+
 		//console.log('request body');
 		//console.log(data);
 		
@@ -100,18 +102,38 @@ export const saveMatchupsRoute = {
 				const db = getDbConnection('cri-matchups');
 				console.log('data');
 				console.log(data);
-				const saveData = data.map(person => {
+				const people = data.people;
+				const date = data.date;
+				const email = data.email;
+				
+				const matchedPeople = people.filter(person => person.matchedWith.length);
+				const groups = matchedPeople.map(person => person.matchedWith.map(matched_person => matched_person.name));
+				const groupsNoDuplicates = Array.from(new Set(groups.map(JSON.stringify)), JSON.parse);
+				
+				const saveData = people.map(person => {
 					const reducedMatchedWith = person.matchedWith.map(matched_person => ({name:matched_person.name}) );
-					console.log(reducedMatchedWith);
 					const trimmedMatchedWith = reducedMatchedWith.filter(matched_person => matched_person.name !== person.name);
-					console.log(trimmedMatchedWith);
-					const concatenatedMatchedWith = person.alreadyMet.concat(trimmedMatchedWith);
-					console.log(concatenatedMatchedWith);
+					const matchedWithPlusDates = trimmedMatchedWith.map(trimmed => ({ ...trimmed, date: date }));
+					const concatenatedMatchedWith = person.alreadyMet.concat(matchedWithPlusDates);
 					return { ...person, alreadyMet: concatenatedMatchedWith, matchedWith: [], omit: false}
 				});
-				console.log('saving');
-				console.log(saveData);
+				//console.log('saving');
+				//console.log(saveData);
 				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: saveData}); 
+				
+				const record = JSON.stringify({[date]:groupsNoDuplicates});
+				
+		
+				await sendEmail({
+					to: email,
+					from: 'spence.codes@gmail.com',
+					subject: 'Weekly meeting matchups',
+					text: `
+						The weekly matchups for ${date} are as follows:
+						${record}
+					`
+				});
+					
 				return res.status(200).json(saveData);					
 			} catch (e) {
 				console.log(e);

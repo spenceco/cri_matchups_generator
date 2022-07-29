@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { removeGroup, saveMeeting, generateMatchups, clearMatchups } from './actions';
+import { removeGroup, saveMeeting, clearMatchups } from './actions';
 import { getPeople } from './selectors';
 import  Modal  from './Modal';
 import ControlledModal from './ControlledModal';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
+
+import { TiDeleteOutline } from 'react-icons/ti';
 
 const MatchedPairsBoxContainer = styled.div`
 
@@ -42,15 +44,20 @@ const Button = styled.button`
 
 
 const GroupContainer = styled.div`
-	background: #efefef;
-	margin-top: 4px;
+    background: #202030;
+	margin-top: 2px;
 	box-shadow: 0 4px 8px grey;
 	border-radius: 8px;
 	display: flex;
 	justify-content: space-between;
-	padding: 2px;
+	padding: 3px;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+    min-height: 50px;
 
 `;
+
 
 const RemoveGroupButton = styled(Button)`
 	background: #bb0000;
@@ -63,7 +70,6 @@ const RemoveGroupButton = styled(Button)`
 
 const NamesContainer = styled.div`
 	background: none;
-	font-size: 14px;
 	margin-bottom: auto;
 `;
 
@@ -90,10 +96,7 @@ const ClearButton = styled.button`
 
 `;
 
-const AutoButton = styled.button`
-	width: 100%;
-	align-self: center;
-`;
+
 
 const DateInput = styled.input`
 
@@ -124,61 +127,10 @@ const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onA
 	const [token ,setToken] = useToken();
 	return (
 		<MatchedPairsBoxContainer>
-		<ControlledModal 
-			buttonName="Save"
-    		shouldShow={shouldShowModal}
-    		onRequestClose={() => {
-	    		setShouldShowModal(false);}}
-			>
-			<DateInputContainer>
-			<div>Date of meeting: </div>
-				<DateInput
-						name="meeting_name"
-						type="text"
-						value={inputValue}
-						onChange={e => setInputValue(e.target.value)}
-						placeholder="MM/DD/YY" />
-			
-			</DateInputContainer>
-			<div>{JSON.stringify({[inputValue]:groups_no_duplicates})}</div>
-			<button onClick={() => {
-				if(!inputValue)
-					alert('Please enter a date for this meeting.');
-				else{
-					//const peopleData = people.map(person => ({ ...person, alreadyMet: person.alreadyMet.map(met => met.name) }) )  ;
-					//console.log(postBody);
-					try{
-						const fetchData = async () => {
-						 	const rawResponse = await fetch(`/api/matchups/${id}`,
-						 	{
-							    method: 'POST',
-							    headers: {
-							      'Accept': 'application/json',
-							      'Content-Type': 'application/json',
-							      'Authorization': `Bearer ${token}`,
-							    },
-							    body: JSON.stringify(people),
-							});
-							const body = await rawResponse.json();
-							onSaveClicked(body);
-							setInputValue('');
-							setShouldShowModal(false);
-						};
-						fetchData();
-								
-					} catch(e) {
-						console.log({"error":e});
-					}
-
-				}
-			}}>Save</button>
-		</ControlledModal>
-		<AutoButton onClick={() => onAutoClicked()}>Auto</AutoButton>
-		<SaveButton onClick={() => setShouldShowModal(true)}>Save</SaveButton>
-		<ClearButton onClick={() => onClearClicked()}>Clear</ClearButton>
-		<GroupsContainer>
-			{groups_no_duplicates.map(group => <GroupContainer key={group.join('|')}><NamesContainer>{group.map(name => <div key={name} selected={selected}>{name}</div>)}</NamesContainer><RemoveGroupButton onClick={() => onRemoveClicked(group)}>x</RemoveGroupButton></GroupContainer>)}
-		</GroupsContainer>
+		
+			<GroupsContainer>
+				{groups_no_duplicates.map(group => <GroupContainer key={group.join('|')}><NamesContainer>{group.map(name => <div key={name} selected={selected}>{name}</div>)}</NamesContainer><TiDeleteOutline style={ { width: '25px', height: 'auto' } } onClick={() => onRemoveClicked(group)}/></GroupContainer>)}
+			</GroupsContainer>
 		</MatchedPairsBoxContainer>
 	);
 }
@@ -190,9 +142,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onRemoveClicked: group => dispatch(removeGroup(group)),
-	onSaveClicked: people => dispatch(saveMeeting(people)),
-	onAutoClicked: () => dispatch(generateMatchups()),
-	onClearClicked: () => dispatch(clearMatchups()),
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(MatchedPairsBox);

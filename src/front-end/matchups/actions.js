@@ -10,6 +10,12 @@ export const setDate = date => ({
 	payload: date,
 });
 
+export const LOAD_MATCHED_PEOPLE = 'LOAD_MATCHED_PEOPLE';
+export const loadMatchedPeople = people => ({
+	type: LOAD_MATCHED_PEOPLE,
+	payload: people,
+});
+
 
 export const OMIT_PERSON = 'OMIT_PERSON';
 export const omitPerson = person => ({

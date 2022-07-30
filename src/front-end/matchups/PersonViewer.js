@@ -209,11 +209,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onRemovePressed: name => dispatch(removePerson(name)),
-	onAutoPressed: () => dispatch(generateMatchups()),
 	onOmitPressed: name => dispatch(omitPerson(name)),
 	onselectPressed: person => dispatch(selectPerson2(person)),
-	onResetPressed: () => dispatch(resetDefaultMatchups()),
-	onSubmitGroupPressed: () => dispatch(submitGroup()),
+
 	onCreatePressed: person_name => dispatch(createPerson(person_name)),
 	onSetDate: date => dispatch(setDate(date)),
 });

@@ -38,7 +38,7 @@ module.exports = {
 	      // Don't be confused with `devMiddleware.publicPath`, it is `publicPath` for static directory
 	      // Can be:
 	      // publicPath: ['/static-public-path-one/', '/static-public-path-two/'],
-	      //publicPath: "/static-public-path/",
+	      //publicPath: "/public/",
 	      // Can be:
 	      // serveIndex: {} (options for the `serveIndex` option you can find https://github.com/expressjs/serve-index)
 	      //serveIndex: true,
@@ -62,6 +62,9 @@ module.exports = {
 				target: 'http://localhost:8080'
 			},
 			'/auth': {
+				target: 'http://localhost:8080'
+			},
+			'/public': {
 				target: 'http://localhost:8080'
 			},
 

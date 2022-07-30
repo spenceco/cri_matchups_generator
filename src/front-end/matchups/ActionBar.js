@@ -30,7 +30,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 	const [shouldShowViewPreviousMeetings,setShouldShowViewPreviousMeetings] = useState(false);
 	const [shouldShowUploadFromJson,setShouldShowUploadFromJson] = useState(false);
 	
-	const matchedPeople = people.filter(person => person.matchedWith.length);
+	const matchedPeople = people.filter(person => person.hasOwnProperty('matchedWith') && person.matchedWith.length);
 	
 	const [inputValue,setInputValue] = useState('');
 	
@@ -117,7 +117,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 				<AddNewPerson shouldShow={shouldShowAddNewPerson} onRequestClose={() => setShouldShowAddNewPerson(false)} />
 				<ResetMatchups shouldShow={shouldShowResetMatchups} onRequestClose={() => setShouldShowResetMatchups(false)} />
 				<ViewPreviousMeetings shouldShow={shouldShowViewPreviousMeetings} onRequestClose={() => setShouldShowViewPreviousMeetings(false)} />
-				<UploadFromJson shouldShow={shouldShowUploadFromJson} onRequestClose={() => setShouldShowUploadFromJson(false)} />
+				<UploadFromJson shouldShow={shouldShowUploadFromJson} onRequestClose={() => setShouldShowUploadFromJson(false)}  />
 			</div>
 		</ActionBarContext.Provider>
 	)

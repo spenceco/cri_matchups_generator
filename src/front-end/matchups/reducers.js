@@ -13,6 +13,7 @@ import { 	OMIT_PERSON,
 			DELETE_SAVED_MATCHUP,
 			LOAD_MATCHUPS,
 			SET_DATE,
+			LOAD_MATCHED_PEOPLE,
 } from './actions.js';
 
 import { getPeople, getAllOtherPeople } from './selectors'
@@ -147,6 +148,15 @@ export const matchups = (state = initialState, action) => {
 							else return person;
 							}),
 						
+			}
+			
+		}
+		
+		case LOAD_MATCHED_PEOPLE: {
+			
+			return { 	...state,
+						selected: [],
+						people: payload,						
 			}
 			
 		}
@@ -445,7 +455,6 @@ export const matchups = (state = initialState, action) => {
 				people: payload,
 			};
 			
-			console.log(newState);
 			
 			return newState;
 		}

@@ -63,7 +63,7 @@ const SaveMenu = ( { onSaveClicked, onRequestClose, shouldShow, people, inputVal
 										height: 'auto',
 										} }/>
 
-		
+				Are you sure you want to save?
 				<button onClick={() => {
 	
 					

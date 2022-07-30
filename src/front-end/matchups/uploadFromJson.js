@@ -1,9 +1,11 @@
 import Modal from './Modal';
 import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson } from './actions';
+import { resetDefaultMatchups, createPerson, saveMeeting } from './actions';
 import { getPeople } from './selectors';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useUser } from '../../auth/useUser';
+import { useToken } from '../../auth/useToken';
 
 
 
@@ -42,20 +44,67 @@ const ModalCloseButton = styled.button`
 `;
 
 
+/*
+
 const parseMeetingData = (people, data) => {
+	console.log("parse");
 	const meeting = JSON.parse(data);
 	const week = Object.keys(meeting)[0];
-	const groups = meeting[week];
+	const recordedMatchups = meeting[week];
+	console.log(week);
 	
+	const findPersonByName = (name) => people.find(person => name == person.name);
 	
-	return groups;
+	const groups = recordedMatchups.map(matchup => {
+		return matchup.map(memberName => {
+			return { ...findPersonByName(memberName), matchedWith: matchup.map(m => findPersonByName(m))};
+		})	 
+	});
+	
+	return groups.flat(1);
+	
+}
+
+*/
+
+const saveToServerAsBackup = async (id,token,people) => {
+	
+	console.log(people);
+
+	try{
+		const fetchData = async () => {
+		 	const rawResponse = await fetch(`/api/matchups/backup/${id}`,
+		 	{
+			    method: 'POST',
+			    headers: {
+			      'Accept': 'application/json',
+			      'Content-Type': 'application/json',
+			      'Authorization': `Bearer ${token}`,
+			    },
+			    body: JSON.stringify({ people:people }),
+			});
+			const body = await rawResponse.json();
+			if(rawResponse.status != 200)
+				alert('Error connecting to database.');
+	
+
+		};
+		fetchData();
+				
+	} catch(e) {
+		console.log({"error":e});
+	}
 	
 }
 
 
 
 
-const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, onResetPressed }  ) => {
+const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, onResetPressed, uploadFromJsonPressed }  ) => {
+	
+	const user = useUser();
+	const { id, email } = user;
+	const [token ,setToken] = useToken();
 	
 	const [inputValue, setInputValue] = useState('');
 
@@ -80,7 +129,11 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 							style={ {height: '300px', width: '400px' } }
 					/>
 					<button onClick={() => {
-						console.log(parseMeetingData(people,data=inputValue))
+						//const matchedPeople = parseMeetingData(people,inputValue);
+						//console.log(matchedPeople);
+						const parsed = JSON.parse(inputValue);
+						uploadFromJsonPressed(parsed);
+						saveToServerAsBackup(id, token, parsed);
 						onRequestClose();
 					}}>Submit</button>
 				</div>
@@ -92,13 +145,14 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 
 const mapStateToProps = state => ({
 	people: getPeople(state),
-
+	
 });
 
 
 const mapDispatchToProps = dispatch => ({
 	onResetPressed: () => dispatch(resetDefaultMatchups()),
 	onCreatePressed: person_name => dispatch(createPerson(person_name)),
+	uploadFromJsonPressed: matchedPeople => dispatch(saveMeeting(matchedPeople))
 });
 
 export default connect(mapStateToProps,mapDispatchToProps)(UploadFromJson);

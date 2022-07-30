@@ -5,9 +5,34 @@ import { ObjectID } from 'mongodb';
 import { getDbConnection } from '../db';
 import jwt from 'jsonwebtoken';
 import { sendEmail } from '../../util/sendEmail';
+import fs from 'fs';
 
+const fsPromises = fs.promises;
 
 var router = express.Router();
+
+
+async function sendBackupEmail(email,attachment){
+	const data = {
+		to: email,
+		from: 'spence.codes@gmail.com',
+		subject: 'Weekly meeting matchups',
+		text: `
+			The backup file for this data is attached.
+		`,
+		attachments: [
+		    {
+		      content: attachment,
+		      filename: "backup.txt",
+		      type: "application/text",
+		      disposition: "attachment"
+		    }
+	  ]
+	};
+	sendEmail(data);
+}
+
+
 
 export const getMatchupsRoute = {
 	path: '/api/matchups/:userId',
@@ -100,8 +125,6 @@ export const saveMatchupsRoute = {
 			
 			try{
 				const db = getDbConnection('cri-matchups');
-				console.log('data');
-				console.log(data);
 				const people = data.people;
 				const date = data.date;
 				const email = data.email;
@@ -121,24 +144,84 @@ export const saveMatchupsRoute = {
 				//console.log(saveData);
 				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: saveData}); 
 				
-				const record = JSON.stringify({[date]:groupsNoDuplicates});
 				
+				console.log('wtf');
 		
-				await sendEmail({
-					to: email,
-					from: 'spence.codes@gmail.com',
-					subject: 'Weekly meeting matchups',
-					text: `
-						The weekly matchups for ${date} are as follows:
-						${record}
-					`
-				});
+				const pathToAttachment = `${__dirname}/backup.txt`;
+				
+
+				fsPromises.writeFile(pathToAttachment,JSON.stringify(saveData))
+				.then(() => fsPromises.readFile(pathToAttachment, { encoding: 'base64' }))
+				.then(attachment => sendBackupEmail(email,attachment))
+				
+
+				
 					
-				return res.status(200).json(saveData);					
+ 	
+				
+
+		
+				return res.status(200).json(saveData);	
+							
+								
 			} catch (e) {
 				console.log(e);
 				return res.status(500).json( { message: "An error occured while trying to access the database" });
 			}
+			
+
+		})
+		
+
+	}
+}
+
+
+
+export const loadBackupRoute = {
+	path: '/api/matchups/backup/:userId',
+	method: 'post',
+	handler: async (req, res) => {
+		const { authorization } = req.headers;
+		const { userId } = req.params;
+		const data = req.body;
+		
+
+		//console.log('request body');
+		//console.log(data);
+		
+		if(!authorization) {
+			return res.status(401).json({ message: 'No authorization header sent' });
+		}
+		const token = authorization.split(' ')[1];
+		
+		
+		jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
+			if(err) return res.status(401).json({ message: 'Unable to verify token.' });
+			
+
+			
+			const { id, isVerified } = decoded;
+
+			
+			if(id !== userId) return res.status(403).json({ message: "Not allowed to access that user's data"});
+			//ALSO NEEDS TO CHECK VERIFIED IN THE FUTURE
+			
+			
+			try{
+				const db = getDbConnection('cri-matchups');
+				const people = data.people;
+				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: people}); 	
+				console.log(userId);
+				console.log(people);
+				console.log(result);	
+				return res.status(200).json(people);						
+			} catch (e) {
+				console.log(e);
+				return res.status(500).json( { message: "An error occured while trying to access the database" });
+			}
+			
+
 		})
 		
 

@@ -1,6 +1,6 @@
 import { signUpRoute } from './signUpRoute';
 import { logInRoute } from './logInRoute';
-import { getMatchupsRoute, saveMatchupsRoute } from './matchupsRoutes';
+import { getMatchupsRoute, saveMatchupsRoute, loadBackupRoute } from './matchupsRoutes';
 import { updateUserInfoRoute } from './updateUserInfoRoute';
 import { verifyEmailRoute } from './verifyEmailRoute';
 import { forgotPasswordRoute } from './forgotPasswordRoute';
@@ -13,6 +13,7 @@ const routes = [
 	logInRoute,
 	getMatchupsRoute,
 	saveMatchupsRoute,
+	loadBackupRoute,
 	updateUserInfoRoute,
 	verifyEmailRoute,
 	forgotPasswordRoute,

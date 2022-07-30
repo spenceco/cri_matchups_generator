@@ -42,7 +42,15 @@ const ModalCloseButton = styled.button`
 `;
 
 
-
+const parseMeetingData = (people, data) => {
+	const meeting = JSON.parse(data);
+	const week = Object.keys(meeting)[0];
+	const groups = meeting[week];
+	
+	
+	return groups;
+	
+}
 
 
 
@@ -71,7 +79,10 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 							placeholder="insert JSON here"
 							style={ {height: '300px', width: '400px' } }
 					/>
-					<button onClick={() => onRequestClose()}>Submit</button>
+					<button onClick={() => {
+						console.log(parseMeetingData(people,data=inputValue))
+						onRequestClose();
+					}}>Submit</button>
 				</div>
 			</ModalBody>
 		</ModalBackground>

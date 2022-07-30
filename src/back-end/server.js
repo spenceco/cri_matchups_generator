@@ -12,9 +12,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname+'/public/'));
-
-
+//app.use(express.static(__dirname+'/public/'));
+console.log('public dir');
+console.log(path.join(__dirname, '..', '..', 'public'));
 
 
 routes.forEach(route => {
@@ -24,14 +24,14 @@ routes.forEach(route => {
 app.get('/dist/bundle.js', (req, res) => {
 	//console.log("bundle")
 	//res.set('Content-Type', 'text/html');
-    res.sendFile(path.join(__dirname, '..', 'dist', 'bundle.js'));
+    res.sendFile(path.join(__dirname, '..', '..', 'dist', 'bundle.js'));
 });
 
-app.use('/static', express.static(path.join(__dirname, 'public')))
+app.use('/public', express.static(path.join(__dirname, '..', '..', 'public')))
 
 app.get('*', (req, res) => {
 	res.set('Content-Type', 'text/html');
-    res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', '..', 'public', 'index.html'));
 });
 
 initializeDbConnection()

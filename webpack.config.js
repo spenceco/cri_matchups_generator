@@ -47,7 +47,7 @@ module.exports = {
 	      //watch: true,
 	    },
 	    
-	    allowedHosts: ['dev.spence.codes',],
+	    allowedHosts: ['dev.spence.codes','spence.codes'],
 	    //disableHostCheck: true,
 		port: 3000,
 		allowedHosts: "all",

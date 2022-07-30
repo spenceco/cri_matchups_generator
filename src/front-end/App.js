@@ -19,7 +19,7 @@ const AppContainer = styled.div`
 	justify-content: flex-start;
 	align-items: center;
 	background-color: black;
-	background-image: url(/images/chess3.jpg);
+	background-image: url(/public/images/chess3.jpg);
 	background-size: 100%;
 	height: 100%;
 	width: 100%;

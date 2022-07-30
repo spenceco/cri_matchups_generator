@@ -92,7 +92,7 @@ export const LogInPage = () => {
 					onClick={() => navigate('/signup')}>Dont have an account? Sign up</button>
 				<GoogleSignInButton
 					disabled={!googleOauthUrl}
-					src="/images/btn_google_signin_light_focus_web@2x.png"
+					src="/public/images/btn_google_signin_light_focus_web@2x.png"
 					onClick={() => { window.location.href = googleOauthUrl }}
 				/>
 			</ButtonContainer>

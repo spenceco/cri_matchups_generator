@@ -11,14 +11,28 @@ const fsPromises = fs.promises;
 
 var router = express.Router();
 
+async function sendBackupEmail(email,date,groups,attachment){
 
-async function sendBackupEmail(email,date,attachment){
+	const prettyGroups = groups.map(group => {
+			
+			if(group.length == 2)
+				return (`<br/><span>${group[0]} and ${group[1]}</span></>`)
+			if(group.length == 3)
+				return (`<br/><span>${group[0]}, ${group[1]}, and ${group[2]}</span>`)
+			return 
+	}).join('');	
+
+	
 	const data = {
 		to: email,
 		from: 'spence.codes@gmail.com',
-		subject: 'Weekly meeting matchups',
+		subject: `Weekly meeting matchups - ${date}`,
 		text: `
-			The backup file for this data is attached.
+			Please view in HTML
+		`,
+		html: `
+			The groups for ${date} are: <br/>
+			${prettyGroups}
 		`,
 		attachments: [
 		    {
@@ -31,6 +45,10 @@ async function sendBackupEmail(email,date,attachment){
 	};
 	sendEmail(data);
 }
+
+
+
+
 
 
 
@@ -140,19 +158,14 @@ export const saveMatchupsRoute = {
 					const concatenatedMatchedWith = person.alreadyMet.concat(matchedWithPlusDates);
 					return { ...person, alreadyMet: concatenatedMatchedWith, matchedWith: [], omit: false}
 				});
-				//console.log('saving');
-				//console.log(saveData);
-				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: saveData}); 
 				
-				
-				console.log('wtf');
-		
+				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: saveData}); 		
 				const pathToAttachment = `${__dirname}/backup.txt`;
 				
 
 				fsPromises.writeFile(pathToAttachment,JSON.stringify(saveData))
 				.then(() => fsPromises.readFile(pathToAttachment, { encoding: 'base64' }))
-				.then(attachment => sendBackupEmail(email,date,attachment))
+				.then(attachment => sendBackupEmail(email,date,groupsNoDuplicates,attachment))
 				
 
 				

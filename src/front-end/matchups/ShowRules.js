@@ -1,10 +1,5 @@
 import Modal from './Modal';
-import { connect } from 'react-redux';
-import { deleteSavedMatchup } from './actions';
-import { getPeople } from './selectors';
-import { useState } from 'react';
 import styled from 'styled-components';
-
 import { TiDeleteOutline } from 'react-icons/ti';
 
 
@@ -45,11 +40,10 @@ const ModalCloseButton = styled.button`
 
 
 
-const EditPersonMenu = ( { onRequestClose, person, onDeleteSavedMatchupPressed, save }  ) => {
+const ShowRules = ( { shouldShow, onRequestClose, people, }  ) => {
 	
-
 	
-	return person && (<>
+	return shouldShow && (<>
 		<ModalBackground onClick={() => onRequestClose()}>
 			<ModalBody onClick={e => e.stopPropagation()}>
 				<TiDeleteOutline onClick={() => onRequestClose()}
@@ -59,29 +53,15 @@ const EditPersonMenu = ( { onRequestClose, person, onDeleteSavedMatchupPressed, 
 						width: '25px',
 						height: 'auto',
 						} }/>
-				<h3>{`${person.name} (${person.alreadyMet.length})`}</h3>
-			{
-				person.alreadyMet.length ? person.alreadyMet.map(met => <button key={met.name} onClick={ () => {
 						
-					onDeleteSavedMatchupPressed(person.name,met.name);
-					save();
-				} }>{met.name}</button>) : 
-				<div>No matchups yet</div>
-			}
+				<span>da rules</span>
 			</ModalBody>
 		</ModalBackground>
 	</>
 	)
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
-
-});
 
 
-const mapDispatchToProps = dispatch => ({
-	onDeleteSavedMatchupPressed: (first_person, second_person) => dispatch(deleteSavedMatchup(first_person, second_person)),
-});
 
-export default connect(mapStateToProps,mapDispatchToProps)(EditPersonMenu);
+export default ShowRules;

@@ -43,37 +43,13 @@ const ModalCloseButton = styled.button`
 	
 `;
 
-
-/*
-
-const parseMeetingData = (people, data) => {
-	console.log("parse");
-	const meeting = JSON.parse(data);
-	const week = Object.keys(meeting)[0];
-	const recordedMatchups = meeting[week];
-	console.log(week);
-	
-	const findPersonByName = (name) => people.find(person => name == person.name);
-	
-	const groups = recordedMatchups.map(matchup => {
-		return matchup.map(memberName => {
-			return { ...findPersonByName(memberName), matchedWith: matchup.map(m => findPersonByName(m))};
-		})	 
-	});
-	
-	return groups.flat(1);
-	
-}
-
-*/
-
-const saveToServerAsBackup = async (id,token,people) => {
+const saveToServer = async (id,token,people) => {
 	
 	console.log(people);
 
 	try{
 		const fetchData = async () => {
-		 	const rawResponse = await fetch(`/api/matchups/backup/${id}`,
+		 	const rawResponse = await fetch(`/api/matchups/save/${id}`,
 		 	{
 			    method: 'POST',
 			    headers: {
@@ -133,7 +109,7 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 						//console.log(matchedPeople);
 						const parsed = JSON.parse(inputValue);
 						uploadFromJsonPressed(parsed);
-						saveToServerAsBackup(id, token, parsed);
+						saveToServer(id, token, parsed);
 						onRequestClose();
 					}}>Submit</button>
 				</div>

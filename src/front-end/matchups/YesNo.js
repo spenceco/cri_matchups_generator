@@ -20,7 +20,6 @@ const ModalBody = styled.div`
 	padding: 20px;
 	width: 25%;
 	display: flex;
-	flex-direction: column;
 	align-items: center;
 	border-radius: 8px;
 	color: white;

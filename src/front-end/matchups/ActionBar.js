@@ -13,10 +13,13 @@ import AddNewPerson from '../matchups/AddNewPerson';
 import ResetMatchups from '../matchups/ResetMatchups';
 import ViewPreviousMeetings from '../matchups/viewPreviousMeetings';
 import UploadFromJson from '../matchups/uploadFromJson';
+import ShowRules from '../matchups/ShowRules';
+import YesNo from './YesNo';
 
 import { MdOutlineAutoAwesome, MdSend } from 'react-icons/md';
 
 import styled from 'styled-components';
+import ReactTooltip from 'react-tooltip';
 
 export const ActionBarContext = createContext();
 
@@ -29,6 +32,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 	const [shouldShowResetMatchups,setShouldShowResetMatchups] = useState(false);
 	const [shouldShowViewPreviousMeetings,setShouldShowViewPreviousMeetings] = useState(false);
 	const [shouldShowUploadFromJson,setShouldShowUploadFromJson] = useState(false);
+	const [shouldShowShowRules,setShouldShowShowRules] = useState(false);
 	
 	const matchedPeople = people.filter(person => person.hasOwnProperty('matchedWith') && person.matchedWith.length);
 	
@@ -81,24 +85,43 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 												setShouldShowResetMatchups, 
 												setShouldShowViewPreviousMeetings,
 												setShouldShowUploadFromJson,
+												setShouldShowShowRules,
 												} }>
 			<div style={barStyle}>
 				<div style={ {margin: 'auto auto auto 10px', display: 'flex'} }>
 					<input 	
+						data-tip data-for="dateTip"
 						value={inputValue}
 						onChange={e => setInputValue(e.target.value)}
 						type='text' 
 						placeholder="MM-DD-YYYY" 
 						style={ {margin: '5px 5px 5px 0', width: '250px'} } 
 					/>
-					<MdSend style={ { width: '25px', height: 'auto', margin:'auto 0 auto auto', color: 'white'} } onClick={() => {
-						if(selected.length > 1) onSubmitGroupPressed();
-						else alert("Select at least two members to form a group.");
-					}} />
-					<MdOutlineAutoAwesome style={ { width: '25px', height: 'auto', margin:'auto 3px auto 0', color: 'white'} } onClick={ () => onAutoPressed()  } />
+					{
+						selected.length > 3 ? 
+							<YesNo style={{display:'flex'}}	element={  <MdSend data-tip data-for="submitGroupTip" style={ { width: '25px', height: 'auto', margin:'auto 0 auto auto', color: 'white', alignSelf: 'center'} } /> }
+									task={() => onSubmitGroupPressed()} >
+								Groups of more than three people are allowed, but not recommended. Proceed anyway?</YesNo>  :
+							<MdSend data-tip data-for="submitGroupTip" style={ { width: '25px', height: 'auto', margin:'auto 0 auto auto', color: 'white'} } onClick={() => {
+								if(selected.length < 2) alert("Select at least two members to form a group.");
+								else onSubmitGroupPressed();
+							}} />							
+						
+					}
+
+					<MdOutlineAutoAwesome data-tip data-for="autoTip" style={ { width: '25px', height: 'auto', margin:'auto 3px auto 0', color: 'white'} } onClick={ () => onAutoPressed()  } />
+			        <ReactTooltip id="submitGroupTip" place="top" effect="solid">
+			        	Assign selected members to group
+			        </ReactTooltip>
+			        <ReactTooltip id="autoTip" place="top" effect="solid">
+			        	Automatically assign groups
+			        </ReactTooltip>
+				     <ReactTooltip id="dateTip" place="top" effect="solid">
+				        Enter the date of the meeting
+				     </ReactTooltip>
 				</div>
 				<div style={ { margin: 'auto 0 auto auto'} }>
-					<GiSaveArrow style={ style } aria-label="Save Meeting" onClick={() => {
+					<GiSaveArrow data-tip data-for="saveTip" style={ style } aria-label="Save Meeting" onClick={() => {
 						if(inputValue == '')
 							alert("Please enter a date");
 						else if(!matchedPeople.length)
@@ -108,8 +131,17 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 						else
 							setShouldShowSaveMenu(true);	
 					}}/>
-					<BiEraser style={ style } alt="Unpair All" onClick={() => onClearClicked()} />
-					<HiDotsVertical style={ style } onClick={ () => setShouldShowSettingsMenu(true)} />
+					<BiEraser data-tip data-for="clearTip" style={ style } alt="Unpair All" onClick={() => onClearClicked()} />
+					<HiDotsVertical data-tip data-for="moreOptionsTip" style={ style } onClick={ () => setShouldShowSettingsMenu(true)} />
+				     <ReactTooltip id="saveTip" place="top" effect="solid">
+				        Save meeting
+				     </ReactTooltip>
+				     <ReactTooltip id="clearTip" place="top" effect="solid">
+				        Clear assigned groups
+				     </ReactTooltip>
+				     <ReactTooltip id="moreOptionsTip" place="top" effect="solid">
+				        More options
+				     </ReactTooltip>
 				</div>
 				<SettingsMenu shouldShow={shouldShowSettingsMenu} onRequestClose={() => setShouldShowSettingsMenu(false)} />
 				<ShowRemainingMatchups shouldShow={shouldShowRemainingMatchups} onRequestClose={() => setShouldShowRemainingMatchups(false)} />
@@ -118,6 +150,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 				<ResetMatchups shouldShow={shouldShowResetMatchups} onRequestClose={() => setShouldShowResetMatchups(false)} />
 				<ViewPreviousMeetings shouldShow={shouldShowViewPreviousMeetings} onRequestClose={() => setShouldShowViewPreviousMeetings(false)} />
 				<UploadFromJson shouldShow={shouldShowUploadFromJson} onRequestClose={() => setShouldShowUploadFromJson(false)}  />
+				<ShowRules shouldShow={shouldShowShowRules} onRequestClose={() => setShouldShowShowRules(false)}  />
 			</div>
 		</ActionBarContext.Provider>
 	)

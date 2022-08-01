@@ -11,12 +11,10 @@
     "build": "npx webpack --mode development",
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"
   },
- 
   "browser": {
-        "fs": false,
-        "net": false
-         },
-         
+    "fs": false,
+    "net": false
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -55,6 +53,7 @@
     "react-icons": "^4.4.0",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
+    "react-tooltip": "^4.2.21",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",

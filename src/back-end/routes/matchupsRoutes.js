@@ -178,8 +178,8 @@ export const saveMatchupsRoute = {
 
 
 
-export const loadBackupRoute = {
-	path: '/api/matchups/backup/:userId',
+export const saveRoute = {
+	path: '/api/matchups/save/:userId',
 	method: 'post',
 	handler: async (req, res) => {
 		const { authorization } = req.headers;

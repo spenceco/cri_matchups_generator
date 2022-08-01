@@ -33,20 +33,12 @@ export const isLoading = (state = false, action) => {
 	}
 };
 */
-const ppl = [	'Amy F.', 'Angela K.','Beth R.','Brian C.','Brooke G.','Caroline L.','Drew B.','Erica I.','Erin V.','Halley S.','Jamy W.','Jen P.','Jon G.','Josh D.','Karen K.',
-				'Kerri G.','Kim S.','Kitsie R.','Kristin Q.','Liz R.','Maddie K.','Mary G.','Matt J.','Melanie P.','Steph C.','Stephen D.','Tina T.','Vicki T.','Wynn D.','Zack C.'
-			];
+
 
 const initialState = {
 	selected: [],
 	date: null,
-	people:ppl.map(person_name => {
-		return {
-			name: person_name,
-			omit: false,
-			matchedWith: [],
-			alreadyMet: [], }
-		})
+	people: [],
 	};
 	
 	

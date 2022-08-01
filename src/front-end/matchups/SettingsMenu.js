@@ -50,7 +50,13 @@ const ModalCloseButton = styled.button`
 const SettingsMenu = ( { shouldShow, onRequestClose, people, onCreatePressed, onResetPressed }  ) => {
 	
 	const [inputValue, setInputValue] = useState('');
-	const { setShouldShowRemainingMatchups, setShouldShowAddNewPerson, setShouldShowResetMatchups, setShouldShowViewPreviousMeetings, setShouldShowUploadFromJson } = useContext(ActionBarContext);
+	const { 	setShouldShowRemainingMatchups, 
+				setShouldShowAddNewPerson, 
+				setShouldShowResetMatchups, 
+				setShouldShowViewPreviousMeetings, 
+				setShouldShowUploadFromJson,
+				setShouldShowShowRules,
+				} = useContext(ActionBarContext);
 	
 	return shouldShow && (<>
 		
@@ -89,6 +95,11 @@ const SettingsMenu = ( { shouldShow, onRequestClose, people, onCreatePressed, on
 						onRequestClose();
 						}
 					}>Create Meeting from JSON</button>
+					<button onClick={() => {
+						setShouldShowShowRules(true);
+						onRequestClose();
+						}
+					}>Show Rules</button>
 				</div>
 			</ModalBody>
 		</ModalBackground>

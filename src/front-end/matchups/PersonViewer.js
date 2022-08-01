@@ -8,13 +8,16 @@ import Modal from './Modal';
 import MatchedPairsBox from './MatchedPairsBox';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
-import { FaRegEye } from 'react-icons/fa';
+import { VscEyeClosed } from 'react-icons/vsc';
 import YesNo from './YesNo';
 
 
 import EditPersonMenu from '../matchups/EditPersonMenu';
 
+import { useUser } from '../../auth/useUser';
+import { useToken } from '../../auth/useToken';
 
+import ReactTooltip from 'react-tooltip';
 
 const AttendingPersonList = styled.div`
     border-radius: 8px;
@@ -138,6 +141,37 @@ const ShowRemainingButton = styled.button`
 
 `;
 
+const saveToServer = async (id,token,people) => {
+	
+	console.log(people);
+
+	try{
+		const fetchData = async () => {
+		 	const rawResponse = await fetch(`/api/matchups/save/${id}`,
+		 	{
+			    method: 'POST',
+			    headers: {
+			      'Accept': 'application/json',
+			      'Content-Type': 'application/json',
+			      'Authorization': `Bearer ${token}`,
+			    },
+			    body: JSON.stringify({ people:people }),
+			});
+			const body = await rawResponse.json();
+			if(rawResponse.status != 200)
+				alert('Error connecting to database.');
+	
+
+		};
+		fetchData();
+				
+	} catch(e) {
+		console.log({"error":e});
+	}
+	
+}
+
+
 const TeamList = ({ people, onOmitPressed, onRemovePressed }) => {
 	return (
 		<div>
@@ -157,12 +191,15 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 	
 	const [personBeingEdited,setPersonBeingEdited] = useState(false);
 
+	const user = useUser();
+	const { id, email } = user;
+	const [token ,setToken] = useToken();
 	
 
 	
 	return (
 		<PersonViewerContainer>	
-		<EditPersonMenu onRequestClose={() => setPersonBeingEdited(null)} person={personBeingEdited} />
+		<EditPersonMenu onRequestClose={() => setPersonBeingEdited(null)} person={personBeingEdited} save={() => saveToServer(id,token,people)} />
 		<MeetingContainer>
 			<AttendingPersonList>
 				<HeaderContainer>
@@ -178,17 +215,43 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 					person = {person} 
 					key = {person.name}
 					selected = {selected}
-					onClick={() => onselectPressed(person)
+					onClick={() => {
+						if(person.omit)
+							alert("This person is currently omitted");
+						else
+							onselectPressed(person);
+					}
 					}>
 					<PersonName>
 						{person.name}({person.alreadyMet.length})
 					</PersonName>
 					<AttendeeOptionsContainer onClick={e => e.stopPropagation()}>
-						<FaRegEye  style={ { width: '25px', height: 'auto' } } alt="Omit from Meeting" onClick={() => onOmitPressed(person)} />
-						<MdOutlineModeEditOutline style={ { width: '25px', height: 'auto' } } alt="Edit Team Member" onClick={ () => setPersonBeingEdited(person) } />
-						<YesNo element={<RiDeleteBin6Line style={ { width: '25px', height: 'auto' } } alt="Delete Team Member" /> } task={ () => onRemovePressed(person) }>
+						<VscEyeClosed  data-tip data-for="omitTip" style={ { width: '25px', height: 'auto' } } onClick={() => {
+							if(selected.find(s => person.name == s.name))
+								alert("Deselect this person before omitting");
+							else
+								onOmitPressed(person);
+						}} />
+						<MdOutlineModeEditOutline data-tip data-for="editTip" style={ { width: '25px', height: 'auto' } }  onClick={ () => setPersonBeingEdited(person) } />
+						<YesNo element={<RiDeleteBin6Line data-tip data-for="removeTip" style={ { width: '25px', height: 'auto' } }  /> } task={ () => {
+							onRemovePressed(person);
+							saveToServer(id, token, people.filter(p => p.name !== person.name));
+							//saveToServer hook
+							alert('saved');
+						} }>
 							<span>Are you sure you want to remove {person.name} from the team?</span>
 						</YesNo>
+
+
+				      <ReactTooltip id="omitTip" place="top" effect="solid">
+				        Omit from this meeting
+				      </ReactTooltip>
+				      <ReactTooltip id="editTip" place="top" effect="solid">
+				        Edit previous matchups
+				      </ReactTooltip>
+				      <ReactTooltip id="removeTip" place="top" effect="solid">
+				        Remove from team
+				      </ReactTooltip>
 					</AttendeeOptionsContainer>
 					</AttendeeContainer> )}
 				</AttendeesContainer>

@@ -43,7 +43,7 @@ const Footer = () => {
 		<Container>
 			<TextContainer>
 				<TextStyle>© 2022 Spencer Perkins</TextStyle><PipeContainer>|</PipeContainer>
-				<TextStyle>spencerperkinsATL@gmail.com</TextStyle><PipeContainer>|</PipeContainer>
+				<TextStyle>SpencerPerkinsATL@gmail.com</TextStyle><PipeContainer>|</PipeContainer>
 				<TextStyle>(404)-910-3744</TextStyle><PipeContainer>|</PipeContainer>
 				<TextStyle>www.linkedin.com/in/spencermperkins</TextStyle>
 			</TextContainer>

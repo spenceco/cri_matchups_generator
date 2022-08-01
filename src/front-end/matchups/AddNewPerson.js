@@ -59,6 +59,7 @@ const AddNewPerson = ( { shouldShow, onRequestClose, people, onCreatePressed }  
 						width: '25px',
 						height: 'auto',
 						} }/>
+				<span>Person Name:</span>
 			{
 				<>	
 					<input
@@ -66,7 +67,7 @@ const AddNewPerson = ( { shouldShow, onRequestClose, people, onCreatePressed }  
 							type="text"
 							value={inputValue}
 							onChange={e => setInputValue(e.target.value)}
-							placeholder="Type your new person name here" />
+							placeholder="John Smith" />
 					<button onClick={() => {
 						onCreatePressed(inputValue);
 						setInputValue('');

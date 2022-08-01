@@ -12,7 +12,7 @@ const fsPromises = fs.promises;
 var router = express.Router();
 
 
-async function sendBackupEmail(email,attachment){
+async function sendBackupEmail(email,date,attachment){
 	const data = {
 		to: email,
 		from: 'spence.codes@gmail.com',
@@ -23,7 +23,7 @@ async function sendBackupEmail(email,attachment){
 		attachments: [
 		    {
 		      content: attachment,
-		      filename: "backup.txt",
+		      filename: `backup-${date}.txt`,
 		      type: "application/text",
 		      disposition: "attachment"
 		    }
@@ -152,7 +152,7 @@ export const saveMatchupsRoute = {
 
 				fsPromises.writeFile(pathToAttachment,JSON.stringify(saveData))
 				.then(() => fsPromises.readFile(pathToAttachment, { encoding: 'base64' }))
-				.then(attachment => sendBackupEmail(email,attachment))
+				.then(attachment => sendBackupEmail(email,date,attachment))
 				
 
 				
@@ -211,10 +211,7 @@ export const saveRoute = {
 			try{
 				const db = getDbConnection('cri-matchups');
 				const people = data.people;
-				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: people}); 	
-				console.log(userId);
-				console.log(people);
-				console.log(result);	
+				const result = await db.collection('matchups').replaceOne({userId:userId},{ userId: userId, people: people}); 		
 				return res.status(200).json(people);						
 			} catch (e) {
 				console.log(e);

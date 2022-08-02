@@ -21,10 +21,10 @@ routes.forEach(route => {
     app[route.method](route.path, route.handler);
 });
 
-app.get('/dist/bundle.js', (req, res) => {
+app.get('/dist/:fileName', (req, res) => {
 	//console.log("bundle")
 	//res.set('Content-Type', 'text/html');
-    res.sendFile(path.join(__dirname, '..', '..', 'dist', 'bundle.js'));
+    res.sendFile(path.join(__dirname, '..', '..', 'dist',req.params.fileName));
 });
 
 app.use('/public', express.static(path.join(__dirname, '..', '..', 'public')))

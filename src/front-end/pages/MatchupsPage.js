@@ -1,7 +1,7 @@
 import SplitScreen from '../layout/SplitScreen';
 import PersonViewer from '../matchups/PersonViewer';
 import MatchedPairsBox from '../matchups/MatchedPairsBox';
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
 import { connect } from 'react-redux';
@@ -52,13 +52,14 @@ const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, peopl
 	},[]);	
 
 	return (
-		<Container>
-			<ActionBar onSaveClicked={onSaveClicked} onClearClicked={onClearClicked} date={date} people={people} />
-			<SplitScreen leftWeight={1} rightWeight={1}>
-				<PersonViewer />
-				<MatchedPairsBox />
-			</SplitScreen>
-		</Container>
+			<Container>
+				
+					<ActionBar onSaveClicked={onSaveClicked} onClearClicked={onClearClicked} date={date} people={people} />
+					<SplitScreen leftWeight={1} rightWeight={1}>
+						<PersonViewer />
+						<MatchedPairsBox />
+					</SplitScreen>
+			</Container>
 	)
 }
 

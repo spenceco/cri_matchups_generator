@@ -29,7 +29,6 @@ const AttendingPersonList = styled.div`
 	margin-right: 0px;
 	display: flex;
 	flex-direction: column;
-
 `;
 
 
@@ -69,23 +68,19 @@ const Button = styled.button`
     cursor: pointer;
     display: inline-block;
     height: 20px;
-
 `;
 
 
 
 const SubmitGroupButtonContainer = styled.div`
-
 	grid-area: submit-group-container;
 	align-self: center;
 `;
 
 const SubmitGroupButton = styled.button`
-
 `;
 
 const AttendeeOptionButton = styled.button `
-
 	
 `;
 
@@ -96,11 +91,9 @@ const RemoveButton = styled(AttendeeOptionButton)`
 `;
 
 const OmitButton = styled(AttendeeOptionButton)`
-
 `;
 
 const EditButton = styled(AttendeeOptionButton)`
-
 `;
 
 
@@ -110,7 +103,6 @@ const HeaderContainer = styled.div`
 `;
 
 const AttendeesContainer = styled.div`
-
 	  display: flex;
 	  width: 100%;
 	  flex-direction: column;
@@ -119,7 +111,6 @@ const AttendeesContainer = styled.div`
 
 const MeetingContainer = styled.div`
 	width: 100%;
-
 `;
 
 const PersonName = styled.div`
@@ -131,14 +122,11 @@ const PersonName = styled.div`
 const AttendeeOptionsContainer = styled.div`
 	display: flex;
 	justify-content: end;
-
 `;
 
 
 
 const ShowRemainingButton = styled.button`
-
-
 `;
 
 const saveToServer = async (id,token,people) => {

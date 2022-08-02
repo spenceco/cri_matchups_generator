@@ -1,7 +1,4 @@
-import Modal from './Modal';
 import { connect } from 'react-redux';
-import { deleteSavedMatchup } from './actions';
-import { getPeople } from './selectors';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 

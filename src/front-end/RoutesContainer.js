@@ -33,8 +33,7 @@ export const RoutesContainer = () => {
 						<Suspense fallback={<p>Loading routes...</p>}>
 							<PrivateRoute>
 								<MatchupsPage />
-								
-							</PrivateRoute>} />
+							</PrivateRoute>						
 						</Suspense>
 					} />
 				<Route path="/verify-email/:verificationString"

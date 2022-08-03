@@ -4,14 +4,9 @@ import MatchedPairsBox from '../matchups/MatchedPairsBox';
 import React, { useEffect, Suspense } from 'react';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
-import { connect } from 'react-redux';
-import { loadMatchups } from '../matchups/actions';
 import ActionBar from '../matchups/ActionBar';
-
-
-
 import styled from 'styled-components';
-
+import { useStateHooks } from '../state/StateContext';
 
 
 const Container = styled.div`
@@ -24,11 +19,13 @@ const Container = styled.div`
 
 
 
-const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, people, date }) => {
+const MatchupsPage = () => {
 	
 	const user = useUser();
 	const { id } = user;
 	const [token , setToken] = useToken();
+	const { matchups,loadMatchups } = useStateHooks().matchups;
+	const { people } = matchups;
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -39,9 +36,10 @@ const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, peopl
 					.then(response => response.json())
 					.then(response => {
 						const peopleData = response.people;
-
+						console.log('peopleData');
+						console.log(peopleData);
 						if(peopleData)
-							onPeopleDataLoaded(peopleData);
+							loadMatchups(peopleData);
 					})					
 				} catch(e) {
 					console.log({"error" : e});
@@ -51,10 +49,9 @@ const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, peopl
 		fetchData();
 	},[]);	
 
-	return (
+	return ( people && 
 			<Container>
-				
-					<ActionBar onSaveClicked={onSaveClicked} onClearClicked={onClearClicked} date={date} people={people} />
+					<ActionBar />
 					<SplitScreen leftWeight={1} rightWeight={1}>
 						<PersonViewer />
 						<MatchedPairsBox />
@@ -63,16 +60,4 @@ const MatchupsPage = ({ onPeopleDataLoaded, onSaveClicked, onClearClicked, peopl
 	)
 }
 
-const mapDispatchToProps = dispatch => ({
-	onPeopleDataLoaded: peopleData => dispatch(loadMatchups(peopleData)),
-	onSaveClicked: people => dispatch(saveMeeting(people)),
-	onClearClicked: () => dispatch(clearMatchups()),
-});
-
-const mapStateToProps = state => ({
-	date: state.matchups.date,
-	people: state.matchups.people,
-});
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(MatchupsPage);
+export default MatchupsPage;

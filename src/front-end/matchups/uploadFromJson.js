@@ -1,12 +1,9 @@
 import Modal from './Modal';
-import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson, saveMeeting } from './actions';
-import { getPeople } from './selectors';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
-
+import { useStateHooks } from '../state/StateContext';
 
 
 import { TiDeleteOutline } from 'react-icons/ti';
@@ -76,13 +73,16 @@ const saveToServer = async (id,token,people) => {
 
 
 
-const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, onResetPressed, uploadFromJsonPressed }  ) => {
+const UploadFromJson = ( { shouldShow, onRequestClose }  ) => {
 	
 	const user = useUser();
 	const { id, email } = user;
 	const [token ,setToken] = useToken();
 	
 	const [inputValue, setInputValue] = useState('');
+	
+	const { matchups, saveMeeting } = useStateHooks().matchups;
+	const { people } = matchups;
 
 	
 	return shouldShow && (<>
@@ -108,7 +108,7 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 						//const matchedPeople = parseMeetingData(people,inputValue);
 						//console.log(matchedPeople);
 						const parsed = JSON.parse(inputValue);
-						uploadFromJsonPressed(parsed);
+						saveMeeting(parsed);
 						saveToServer(id, token, parsed);
 						onRequestClose();
 					}}>Submit</button>
@@ -119,16 +119,5 @@ const UploadFromJson = ( { shouldShow, onRequestClose, people, onCreatePressed, 
 	)
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
-	
-});
 
-
-const mapDispatchToProps = dispatch => ({
-	onResetPressed: () => dispatch(resetDefaultMatchups()),
-	onCreatePressed: person_name => dispatch(createPerson(person_name)),
-	uploadFromJsonPressed: matchedPeople => dispatch(saveMeeting(matchedPeople))
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(UploadFromJson);
+export default UploadFromJson;

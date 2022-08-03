@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { getPeople, saveMeeting } from './actions';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
+import { useStateHooks } from '../state/StateContext';
 
 
 const ModalBackground = styled.div`
@@ -43,12 +42,13 @@ const ModalCloseButton = styled.button`
 
 
 
-const SaveMenu = ( { onSaveClicked, onRequestClose, shouldShow, people, inputValue, setInputValue }) => {
+const SaveMenu = ( { onRequestClose, shouldShow, inputValue, setInputValue }) => {
 
 	const user = useUser();
 	const { id, email } = user;
 	const [token ,setToken] = useToken();
-	
+	const { matchups, saveMeeting } = useStateHooks().matchups;
+	const { people } = matchups;
 
 	
 	return shouldShow && (<>
@@ -81,7 +81,7 @@ const SaveMenu = ( { onSaveClicked, onRequestClose, shouldShow, people, inputVal
 								});
 								const body = await rawResponse.json();
 								if(rawResponse.status == 200){
-									onSaveClicked(body);
+									saveMeeting(body);
 									setInputValue('');
 									onRequestClose();	
 								}
@@ -104,13 +104,8 @@ const SaveMenu = ( { onSaveClicked, onRequestClose, shouldShow, people, inputVal
 	)
 }
 
-const mapStateToProps = state => ({
-	people: state.matchups.people,
-	date: state.matchups.date,
-});
 
-const mapDispatchToProps = dispatch => ({
-	onSaveClicked: people => dispatch(saveMeeting(people)),
-});
 
-export default connect(mapStateToProps,mapDispatchToProps)(SaveMenu);
+
+
+export default SaveMenu;

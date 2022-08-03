@@ -2,11 +2,9 @@ import Modal from './Modal';
 import { connect } from 'react-redux';
 import { resetDefaultMatchups, createPerson } from './actions';
 import { getPeople } from './selectors';
-import { useState } from 'react';
 import styled from 'styled-components';
-
 import { TiDeleteOutline } from 'react-icons/ti';
-
+import { useStateHooks } from '../state/StateContext';
 
 const ModalBackground = styled.div`
 	position: fixed;
@@ -45,9 +43,9 @@ const ModalCloseButton = styled.button`
 
 
 
-const ResetMatchups = ( { shouldShow, onRequestClose, onResetPressed }  ) => {
+const ResetMatchups = ( { shouldShow, onRequestClose } ) => {
 	
-
+	const { resetDefaultMatchups } = useStateHooks().matchups;
 	
 	return shouldShow && (<>
 		<ModalBackground onClick={() => onRequestClose()}>
@@ -63,7 +61,7 @@ const ResetMatchups = ( { shouldShow, onRequestClose, onResetPressed }  ) => {
 				<>	
 						<div>Are you sure you want to reset matchup data?</div>
 						<button onClick={() => {
-							onResetPressed();
+							resetDefaultMatchups();
 							onRequestClose();
 						}
 						}>Reset</button>
@@ -75,14 +73,4 @@ const ResetMatchups = ( { shouldShow, onRequestClose, onResetPressed }  ) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
-
-});
-
-
-const mapDispatchToProps = dispatch => ({
-	onResetPressed: person_name => dispatch(resetDefaultMatchups()),
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(ResetMatchups);
+export default ResetMatchups;

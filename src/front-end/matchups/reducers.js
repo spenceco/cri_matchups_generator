@@ -1,20 +1,4 @@
-import { 	OMIT_PERSON,
-			REMOVE_PERSON,
-			CREATE_PERSON,
-			SELECT_PERSON,
-			SELECT_PERSON_2,
-			SUBMIT_GROUP,
-			GENERATE_MATCHUPS,
-			CLEAR_MATCHUPS,
-			REMAINING_MEETINGS,
-			RESET_DEFAULT_MATCHUPS,
-			REMOVE_GROUP,
-			SAVE_MEETING,
-			DELETE_SAVED_MATCHUP,
-			LOAD_MATCHUPS,
-			SET_DATE,
-			LOAD_MATCHED_PEOPLE,
-} from './actions.js';
+
 
 import { getPeople, getAllOtherPeople } from './selectors'
 
@@ -57,11 +41,11 @@ function chooseRandomArrayElements(array,count=1){
 
 
 
-export const matchups = (state = initialState, action) => {
+export const matchupsReducer = (state = initialState, action) => {
 	const { type, payload } = action;
 	
 	switch (type) {
-		case OMIT_PERSON: {
+		case 'OMIT_PERSON': {
 			const { person : personToOmit } = payload;
 			return {
 				...state,
@@ -73,21 +57,23 @@ export const matchups = (state = initialState, action) => {
 			}
 		}
 		
-		case LOAD_MATCHUPS: {
-			return { ...state, people: payload };
+		case 'LOAD_MATCHUPS': {
+			const newState = { ...state, people: payload };
+			console.log(newState);
+			return newState;
 		}
 		
-		case SET_DATE: {
+		case 'SET_DATE': {
 			return { ...state, date: payload };
 		}
 
 
-		case CREATE_PERSON: {
-			const { person_name } = payload;
-			if(!person_name)
+		case 'CREATE_PERSON': {
+			const { personName } = payload;
+			if(!personName)
 				return;
 			const person = {
-				name: person_name, 
+				name: personName, 
 				omit: false,
 				matchedWith: [],
 				alreadyMet: [],
@@ -98,7 +84,7 @@ export const matchups = (state = initialState, action) => {
 			}
 		}
 
-		case REMOVE_PERSON: {
+		case 'REMOVE_PERSON': {
 			const { person : personToRemove } = payload;
 			return {
 				...state,
@@ -107,7 +93,7 @@ export const matchups = (state = initialState, action) => {
 			}
 		}
 		
-		case SELECT_PERSON_2: {
+		case 'SELECT_PERSON': {
 			const { person: personToSelect } = payload;
 			if(!state.selected)
 				return {
@@ -128,7 +114,7 @@ export const matchups = (state = initialState, action) => {
 		}
 		
 		
-		case SUBMIT_GROUP: {
+		case 'SUBMIT_GROUP': {
 			if(!state.selected)
 				return state;
 			const group = state.selected.map(person => {return {...person,matchedWith:[],alreadyMet:[]}});
@@ -144,7 +130,7 @@ export const matchups = (state = initialState, action) => {
 			
 		}
 		
-		case LOAD_MATCHED_PEOPLE: {
+		case 'LOAD_MATCHED_PEOPLE': {
 			
 			return { 	...state,
 						selected: [],
@@ -153,7 +139,7 @@ export const matchups = (state = initialState, action) => {
 			
 		}
 		
-		case REMOVE_GROUP: {
+		case 'REMOVE_GROUP': {
 			const { group: groupToRemove } = payload;
 			return {
 				...state,
@@ -165,7 +151,7 @@ export const matchups = (state = initialState, action) => {
 			}
 		}
 		
-		case DELETE_SAVED_MATCHUP: {
+		case 'DELETE_SAVED_MATCHUP': {
 			const { first_person, second_person } = payload;
 			//console.log(payload);
 			//console.log(first_person + "/" + second_person);
@@ -187,7 +173,7 @@ export const matchups = (state = initialState, action) => {
 			
 		}
 		
-		case CLEAR_MATCHUPS: {
+		case 'CLEAR_MATCHUPS': {
 			return {
 				...state,
 				people: state.people.map(person => {
@@ -196,7 +182,7 @@ export const matchups = (state = initialState, action) => {
 			}
 		}
 		
-		case GENERATE_MATCHUPS: {
+		case 'GENERATE_MATCHUPS': {
 			
 			function pickGroupMembers(current_state){
 				
@@ -440,7 +426,7 @@ export const matchups = (state = initialState, action) => {
 			return new_state;
 		}
 		
-		case SAVE_MEETING: {
+		case 'SAVE_MEETING': {
 			//console.log(payload);
 			const newState = {
 				...state,
@@ -451,13 +437,13 @@ export const matchups = (state = initialState, action) => {
 			return newState;
 		}
 		
-		case REMAINING_MEETINGS: {
+		case 'REMAINING_MEETINGS': {
 			const remaining = null;
 			return state;
 		}
 		
 		
-		case RESET_DEFAULT_MATCHUPS: 
+		case 'RESET_DEFAULT_MATCHUPS': 
 			return {
 				...state,
 				people: state.people.map(person => ({ name: person.name, alreadyMet: [], matchedWith: [], omit: false }))

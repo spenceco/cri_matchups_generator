@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useState } from 'react';
 import styled from 'styled-components';
-import { removeGroup, saveMeeting, clearMatchups } from './actions';
-import { getPeople } from './selectors';
-import  Modal  from './Modal';
-import ControlledModal from './ControlledModal';
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
-
+import { useStateHooks } from '../state/StateContext';
 import { TiDeleteOutline } from 'react-icons/ti';
 
 const MatchedPairsBoxContainer = styled.div`
@@ -112,36 +107,39 @@ const DateInputContainer = styled.div`
 
 
 
-const MatchedPairsBox = ({ people, selected, onRemoveClicked, onSaveClicked, onAutoClicked, onClearClicked }) => {
-	const matchedPeople = people.filter(person => person.matchedWith.length);
+const MatchedPairsBox = () => {
+
+	const { matchups, removeGroup } = useStateHooks().matchups;
+	const { people, selected } = matchups;
 
 
-	const groups = matchedPeople.map(person => person.matchedWith.map(matched_person => matched_person ? matched_person.name : null));
-	const groups_no_duplicates = Array.from(new Set(groups.map(JSON.stringify)), JSON.parse);
-	
-	const [shouldShowModal,setShouldShowModal] = useState();
+	const [shouldShowModal, setShouldShowModal] = useState();
 	const [inputValue, setInputValue] = useState("");
-	
+
 	const user = useUser();
 	const { id } = user;
-	const [token ,setToken] = useToken();
-	return (
+	const [token, setToken] = useToken();
+	
+	const groupsNoDuplicates = () => {
+		if(!people || !people.length) return [];
+		const matchedPeople = people.filter(person => person.matchedWith.length) ;
+		const groups = matchedPeople.map(person => person.matchedWith.map(matched_person => matched_person ? matched_person.name : null));
+		const groups_no_duplicates = Array.from(new Set(groups.map(JSON.stringify)), JSON.parse);
+		console.log(groups_no_duplicates)
+		return groups_no_duplicates;
+	};
+
+
+	return ( people && 
 		<MatchedPairsBoxContainer>
-		
+
 			<GroupsContainer>
-				{groups_no_duplicates.map(group => <GroupContainer key={group.join('|')}><NamesContainer>{group.map(name => <div key={name} selected={selected}>{name}</div>)}</NamesContainer><TiDeleteOutline style={ { width: '25px', height: 'auto' } } onClick={() => onRemoveClicked(group)}/></GroupContainer>)}
+				{groupsNoDuplicates().map(group => <GroupContainer key={group.join('|')}><NamesContainer>{group.map(name => <div key={name} selected={selected}>{name}</div>)}</NamesContainer><TiDeleteOutline style={{ width: '25px', height: 'auto' }} onClick={() => removeGroup(group)} /></GroupContainer>)}
 			</GroupsContainer>
 		</MatchedPairsBoxContainer>
 	);
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
-	selected: state.matchups.selected
-});
 
-const mapDispatchToProps = dispatch => ({
-	onRemoveClicked: group => dispatch(removeGroup(group)),
-});
 
-export default connect(mapStateToProps,mapDispatchToProps)(MatchedPairsBox);
+export default MatchedPairsBox;

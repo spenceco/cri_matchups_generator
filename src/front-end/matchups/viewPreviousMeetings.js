@@ -1,7 +1,6 @@
-import { connect } from 'react-redux';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-
+import { useStateHooks } from '../state/StateContext';
 import { TiDeleteOutline } from 'react-icons/ti';
 
 
@@ -42,29 +41,36 @@ const ModalCloseButton = styled.button`
 
 
 
-const ViewPreviousMeetings = ( { onRequestClose, people, shouldShow }  ) => {
+const ViewPreviousMeetings = ( { onRequestClose, shouldShow }  ) => {
 	//console.log(people);
-	
+	const { matchups } = useStateHooks().matchups;
+	const { people } = matchups;
 	const [selectedWeek,setSelectedWeek] = useState(false);
-	const allMeetings = people.map(person =>  {
-		return person.alreadyMet.map(met => {
-			return ({[met.date]:[person.name,met.name]})
-		})
-	} );
+
 	
 	
-	let sortedMeetings = {};
+	const sortedMeetings = () => {
+			
+		const allMeetings = people.map(person =>  {
+			return person.alreadyMet.map(met => {
+				return ({[met.date]:[person.name,met.name]})
+			})
+		} );	
 		
-	allMeetings.forEach(chunk => {
-		chunk.forEach(meeting => {
-			const key = Object.keys(meeting)[0];
-			const value = meeting[key];
-			sortedMeetings.hasOwnProperty(key) ? 
-		  		sortedMeetings[key].push(value) :
-		  		sortedMeetings[key] = [value];
-		  		
-		});
-	});
+		let sorted = {};
+		
+		allMeetings.forEach(chunk => {
+			chunk.forEach(meeting => {
+				const key = Object.keys(meeting)[0];
+				const value = meeting[key];
+				sortedMeetings.hasOwnProperty(key) ? 
+			  		sorted[key].push(value) :
+			  		sorted[key] = [value];
+			  		
+			});
+		});	
+		return sorted;
+	}
 	
 		
 		
@@ -82,7 +88,7 @@ const ViewPreviousMeetings = ( { onRequestClose, people, shouldShow }  ) => {
 						height: 'auto',
 						} }/>
 
-			<div style={{display:'flex'}}>{Object.keys(sortedMeetings).map(week => <button style={ {borderColor: (week == selectedWeek ? 'white' : 'transparent') } } onClick={() => setSelectedWeek(week)}>{week}</button>)}</div>
+			<div style={{display:'flex'}}>{Object.keys(sortedMeetings()).map(week => <button style={ {borderColor: (week == selectedWeek ? 'white' : 'transparent') } } onClick={() => setSelectedWeek(week)}>{week}</button>)}</div>
 			{ selectedWeek ? sortedMeetings[selectedWeek].map(m => (<div>{m[0] + ' + ' + m[1]}</div>) ) : <div>Select a week to view data</div> }
 			</ModalBody>
 		</ModalBackground>
@@ -90,12 +96,7 @@ const ViewPreviousMeetings = ( { onRequestClose, people, shouldShow }  ) => {
 	)
 }
 
-const mapStateToProps = state => ({
-	people: state.matchups.people,
-
-});
 
 
 
-
-export default connect(mapStateToProps,null)(ViewPreviousMeetings);
+export default ViewPreviousMeetings;

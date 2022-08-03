@@ -8,7 +8,6 @@ import Footer from './layout/Footer';
 import styled from 'styled-components';
 
 
-
 export const currentUserContext = createContext(); 
 
 
@@ -40,13 +39,14 @@ const App = () => {
 	return (
 
 	  	<BrowserRouter>
-	  		<currentUserContext.Provider value={{ currentUser, setCurrentUser }} >
-			    <AppContainer>
-			    	<NavigationBar />
-					<RoutesContainer />
-					<Footer />
-				</AppContainer>
-			</currentUserContext.Provider>
+				<currentUserContext.Provider value={{ currentUser, setCurrentUser }} >
+					<AppContainer>
+						<NavigationBar />
+						<RoutesContainer />
+						<Footer />
+					</AppContainer>
+				</currentUserContext.Provider>
+
 		</BrowserRouter>
 
 )};

@@ -1,9 +1,6 @@
-import Modal from './Modal';
-import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson } from './actions';
-import { getPeople } from './selectors';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { useStateHooks } from "../state/StateContext";
 
 import { TiDeleteOutline } from 'react-icons/ti';
 
@@ -45,9 +42,10 @@ const ModalCloseButton = styled.button`
 
 
 
-const AddNewPerson = ( { shouldShow, onRequestClose, people, onCreatePressed }  ) => {
+const AddNewPerson = ( { shouldShow, onRequestClose}  ) => {
 	
 	const [inputValue, setInputValue] = useState('');
+	const { createPerson } = useStateHooks().matchups;
 	
 	return shouldShow && (<>
 		<ModalBackground onClick={() => onRequestClose()}>
@@ -69,7 +67,7 @@ const AddNewPerson = ( { shouldShow, onRequestClose, people, onCreatePressed }  
 							onChange={e => setInputValue(e.target.value)}
 							placeholder="John Smith" />
 					<button onClick={() => {
-						onCreatePressed(inputValue);
+						createPerson(inputValue);
 						setInputValue('');
 					}}>Add New</button>
 				</>
@@ -80,14 +78,5 @@ const AddNewPerson = ( { shouldShow, onRequestClose, people, onCreatePressed }  
 	)
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
 
-});
-
-
-const mapDispatchToProps = dispatch => ({
-	onCreatePressed: person_name => dispatch(createPerson(person_name)),
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(AddNewPerson);
+export default AddNewPerson;

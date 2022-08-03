@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { omitPerson, editPerson, createPerson, selectPerson, selectPerson2, submitGroup, removePerson, resetDefaultMatchups, generateMatchups, setDate } from './actions';
-import { getPeople, getAttendingPeople, getMatchedPeople } from './selectors';
-import Modal from './Modal';
-
-import MatchedPairsBox from './MatchedPairsBox';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { VscEyeClosed } from 'react-icons/vsc';
 import YesNo from './YesNo';
-
-
-import EditPersonMenu from '../matchups/EditPersonMenu';
-
 import { useUser } from '../../auth/useUser';
 import { useToken } from '../../auth/useToken';
-
 import ReactTooltip from 'react-tooltip';
+import { useStateHooks } from '../state/StateContext';
 
 const AttendingPersonList = styled.div`
     border-radius: 8px;
@@ -36,7 +26,7 @@ const AttendeeContainer = styled.div`
     background: #202030;
     cursor: pointer;
     font-size: 20px;
-    color: ${props => props.person.omit ? '#bbbbbb' : 'white'};
+    color: ${props => props.person && props.person.omit ? '#bbbbbb' : 'white'};
 	margin-top: 2px;
     min-height: 25px;
     border-radius: 8px;
@@ -47,7 +37,7 @@ const AttendeeContainer = styled.div`
 	justify-content: space-between;
 	overflow: hidden;
 	box-shadow: 0 4px 8px grey;
-	border: ${props => (	!props.selected.length ? '2px solid transparent' : ( props.selected.some(person => props.person.name === person.name) ? '2px solid yellow' : (props.selected.some(selected_person => selected_person.alreadyMet.some(met_person => met_person.name === props.person.name ) ) ? '2px solid red' : '2px solid green') )   )};
+	border: ${props => ( props.selected &&	!props.selected.length ? '2px solid transparent' : ( props.selected.some(person => props.person.name === person.name) ? '2px solid yellow' : (props.selected.some(selected_person => selected_person.alreadyMet.some(met_person => met_person.name === props.person.name ) ) ? '2px solid red' : '2px solid green') )   )};
 `;	
 
 const PersonViewerContainer = styled.div`
@@ -77,24 +67,6 @@ const SubmitGroupButtonContainer = styled.div`
 	align-self: center;
 `;
 
-const SubmitGroupButton = styled.button`
-`;
-
-const AttendeeOptionButton = styled.button `
-	
-`;
-
-
-
-const RemoveButton = styled(AttendeeOptionButton)`
-	
-`;
-
-const OmitButton = styled(AttendeeOptionButton)`
-`;
-
-const EditButton = styled(AttendeeOptionButton)`
-`;
 
 
 const HeaderContainer = styled.div`
@@ -160,34 +132,20 @@ const saveToServer = async (id,token,people) => {
 }
 
 
-const TeamList = ({ people, onOmitPressed, onRemovePressed }) => {
-	return (
-		<div>
-			{ people.map(person => (<TeamMemberContainer 	person={person} 
-															key={person.name}
-															
-															>
-										{person.name}
-										<OmitButton  onClick={() => onOmitPressed(person)}>Omit</OmitButton>
-										<RemoveButton onClick={() => onRemovePressed(person)}>Remove</RemoveButton>
-									</TeamMemberContainer>))}
-		</div>
-	);
-}
 
-const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPressed, onCreatePressed, onRemovePressed, onOmitPressed, onselectPressed, onResetPressed, onDeleteSavedMatchupPressed, onAutoPressed, onSetDate }) => {
+const PersonViewer = () => {
 	
 	const [personBeingEdited,setPersonBeingEdited] = useState(false);
 
 	const user = useUser();
-	const { id, email } = user;
-	const [token ,setToken] = useToken();
+	const { id } = user;
+	const [token] = useToken();
 	
-
+	const { matchups,  removePerson, omitPerson, selectPerson } = useStateHooks().matchups;
+	const { people, selected } = matchups;
 	
-	return (
+	return ( people &&
 		<PersonViewerContainer>	
-		<EditPersonMenu onRequestClose={() => setPersonBeingEdited(null)} person={personBeingEdited} save={() => saveToServer(id,token,people)} />
 		<MeetingContainer>
 			<AttendingPersonList>
 				<HeaderContainer>
@@ -207,7 +165,7 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 						if(person.omit)
 							alert("This person is currently omitted");
 						else
-							onselectPressed(person);
+							selectPerson(person);
 					}
 					}>
 					<PersonName>
@@ -218,11 +176,11 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 							if(selected.find(s => person.name == s.name))
 								alert("Deselect this person before omitting");
 							else
-								onOmitPressed(person);
+								omitPerson(person);
 						}} />
-						<MdOutlineModeEditOutline data-tip data-for="editTip" style={ { width: '25px', height: 'auto' } }  onClick={ () => setPersonBeingEdited(person) } />
+						
 						<YesNo element={<RiDeleteBin6Line data-tip data-for="removeTip" style={ { width: '25px', height: 'auto' } }  /> } task={ () => {
-							onRemovePressed(person);
+							removePerson(person);
 							saveToServer(id, token, people.filter(p => p.name !== person.name));
 							//saveToServer hook
 							alert('saved');
@@ -250,22 +208,6 @@ const PersonViewer = ({ people, attending, selected, matched, onSubmitGroupPress
 	
 }
 	
-const mapStateToProps = state => ({
-	people: getPeople(state),
-	attending: getAttendingPeople(state),
-	selected: state.matchups.selected,
-//	matched: getMatchedPeople(state),
-});
 
 
-const mapDispatchToProps = dispatch => ({
-	onRemovePressed: name => dispatch(removePerson(name)),
-	onOmitPressed: name => dispatch(omitPerson(name)),
-	onselectPressed: person => dispatch(selectPerson2(person)),
-
-	onCreatePressed: person_name => dispatch(createPerson(person_name)),
-	onSetDate: date => dispatch(setDate(date)),
-});
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(PersonViewer);
+export default PersonViewer;

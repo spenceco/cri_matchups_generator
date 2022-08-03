@@ -1,10 +1,7 @@
 import Modal from './Modal';
-import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson } from './actions';
-import { getPeople } from './selectors';
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
-
+import { useStateHooks } from '../state/StateContext';
 import { ActionBarContext } from '../matchups/ActionBar';
 
 import { TiDeleteOutline } from 'react-icons/ti';
@@ -47,7 +44,10 @@ const ModalCloseButton = styled.button`
 
 
 
-const SettingsMenu = ( { shouldShow, onRequestClose, people, onCreatePressed, onResetPressed }  ) => {
+const SettingsMenu = ( { shouldShow, onRequestClose }  ) => {
+	
+	const { matchups, createPerson, resetDefaultMatchups } = useStateHooks().matchups;
+	const { people } = matchups;
 	
 	const [inputValue, setInputValue] = useState('');
 	const { 	setShouldShowRemainingMatchups, 
@@ -107,15 +107,4 @@ const SettingsMenu = ( { shouldShow, onRequestClose, people, onCreatePressed, on
 	)
 }
 
-const mapStateToProps = state => ({
-	people: getPeople(state),
-
-});
-
-
-const mapDispatchToProps = dispatch => ({
-	onResetPressed: () => dispatch(resetDefaultMatchups()),
-	onCreatePressed: person_name => dispatch(createPerson(person_name)),
-});
-
-export default connect(mapStateToProps,mapDispatchToProps)(SettingsMenu);
+export default SettingsMenu;

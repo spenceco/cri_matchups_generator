@@ -16,14 +16,17 @@ import UploadFromJson from '../matchups/uploadFromJson';
 import ShowRules from '../matchups/ShowRules';
 import YesNo from './YesNo';
 
+import { useStateHooks } from "../state/StateContext";
 import { MdOutlineAutoAwesome, MdSend } from 'react-icons/md';
 
-import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
 
 export const ActionBarContext = createContext();
 
-const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSubmitGroupPressed, onAutoPressed }) => {
+const ActionBar = ( { onSaveClicked, onClearClicked, onSubmitGroupPressed, onAutoPressed }) => {
+
+	const { matchups, resetDefaultMatchups, saveMeeting, clearMatchups, generateMatchups, submitGroup } = useStateHooks().matchups;
+	const { date, selected, people } = matchups;
 	
 	const [shouldShowSettingsMenu,setShouldShowSettingsMenu] = useState(false);
 	const [shouldShowSaveMenu,setShouldShowSaveMenu] = useState(false);
@@ -34,9 +37,10 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 	const [shouldShowUploadFromJson,setShouldShowUploadFromJson] = useState(false);
 	const [shouldShowShowRules,setShouldShowShowRules] = useState(false);
 	
-	const matchedPeople = people.filter(person => person.hasOwnProperty('matchedWith') && person.matchedWith.length);
+
 	
 	const [inputValue,setInputValue] = useState('');
+
 	
 	const style = {
 		width: '25px',
@@ -98,18 +102,18 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 						style={ {margin: '5px 5px 5px 0', width: '250px'} } 
 					/>
 					{
-						selected.length > 3 ? 
+						selected && selected.length > 3 ? 
 							<YesNo style={{display:'flex'}}	element={  <MdSend data-tip data-for="submitGroupTip" style={ { width: '25px', height: 'auto', margin:'auto 0 auto auto', color: 'white', alignSelf: 'center'} } /> }
-									task={() => onSubmitGroupPressed()} >
+									task={() => submitGroup()} >
 								Groups of more than three people are allowed, but not recommended. Proceed anyway?</YesNo>  :
 							<MdSend data-tip data-for="submitGroupTip" style={ { width: '25px', height: 'auto', margin:'auto 0 auto auto', color: 'white'} } onClick={() => {
-								if(selected.length < 2) alert("Select at least two members to form a group.");
-								else onSubmitGroupPressed();
+								if(selected && selected.length < 2) alert("Select at least two members to form a group.");
+								else submitGroup();
 							}} />							
 						
 					}
 
-					<MdOutlineAutoAwesome data-tip data-for="autoTip" style={ { width: '25px', height: 'auto', margin:'auto 3px auto 0', color: 'white'} } onClick={ () => onAutoPressed()  } />
+					<MdOutlineAutoAwesome data-tip data-for="autoTip" style={ { width: '25px', height: 'auto', margin:'auto 3px auto 0', color: 'white'} } onClick={ () => generateMatchups()  } />
 			        <ReactTooltip id="submitGroupTip" place="top" effect="solid">
 			        	Assign selected members to group
 			        </ReactTooltip>
@@ -122,6 +126,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 				</div>
 				<div style={ { margin: 'auto 0 auto auto'} }>
 					<GiSaveArrow data-tip data-for="saveTip" style={ style } aria-label="Save Meeting" onClick={() => {
+						const matchedPeople = people.filter(person => person.hasOwnProperty('matchedWith') && person.matchedWith.length);
 						if(inputValue == '')
 							alert("Please enter a date");
 						else if(!matchedPeople.length)
@@ -131,7 +136,7 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 						else
 							setShouldShowSaveMenu(true);	
 					}}/>
-					<BiEraser data-tip data-for="clearTip" style={ style } alt="Unpair All" onClick={() => onClearClicked()} />
+					<BiEraser data-tip data-for="clearTip" style={ style } alt="Unpair All" onClick={() => clearMatchups()} />
 					<HiDotsVertical data-tip data-for="moreOptionsTip" style={ style } onClick={ () => setShouldShowSettingsMenu(true)} />
 				     <ReactTooltip id="saveTip" place="top" effect="solid">
 				        Save meeting
@@ -157,19 +162,6 @@ const ActionBar = ( {onSaveClicked, onClearClicked, people, date, selected, onSu
 }
 
 
-const mapDispatchToProps = dispatch => ({
-	onResetPressed: () => dispatch(resetDefaultMatchups()),
-	onSaveClicked: people => dispatch(saveMeeting(people)),
-	onClearClicked: () => dispatch(clearMatchups()),
-	onSubmitGroupPressed: () => dispatch(submitGroup()),
-	onAutoPressed: () => dispatch(generateMatchups()),
-});
-
-const mapStateToProps = state => ({
-	date: state.matchups.date,
-	people: state.matchups.people,
-	selected: state.matchups.selected,
-});
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(ActionBar);
+export default ActionBar;

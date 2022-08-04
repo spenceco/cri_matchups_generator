@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
 import { useStateHooks } from '../state/StateContext';
 import { TiDeleteOutline } from 'react-icons/ti';
 
@@ -109,16 +107,14 @@ const DateInputContainer = styled.div`
 
 const MatchedPairsBox = () => {
 
-	const { matchups, removeGroup } = useStateHooks().matchups;
+	const stateHooks = useStateHooks();
+	const { matchups, removeGroup } = stateHooks.matchups;
 	const { people, selected } = matchups;
 
 
 	const [shouldShowModal, setShouldShowModal] = useState();
 	const [inputValue, setInputValue] = useState("");
 
-	const user = useUser();
-	const { id } = user;
-	const [token, setToken] = useToken();
 	
 	const groupsNoDuplicates = () => {
 		if(!people || !people.length) return [];

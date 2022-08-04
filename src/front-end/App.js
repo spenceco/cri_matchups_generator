@@ -1,16 +1,11 @@
-import React, { StrictMode, useState, useEffect, createContext } from 'react';
+
 import { BrowserRouter } from 'react-router-dom';
 import { RoutesContainer } from './RoutesContainer';
-import { useUser } from '../auth/useUser';
+import { useStateHooks } from './state/StateContext';
 import NavigationBar from './layout/NavigationBar';
 import Footer from './layout/Footer';
-
 import styled from 'styled-components';
-
-
-export const currentUserContext = createContext(); 
-
-
+import { useEffect } from 'react';
 
 const AppContainer = styled.div`
 	display: flex;
@@ -31,21 +26,25 @@ const BackgroundImage = styled.img`
 	height: 50%;
 `;
 const App = () => {
-	const [currentUser,setCurrentUser] = useState(useUser());
 	
+const stateHooks = useStateHooks();
+const user = stateHooks.user;
+const [ profile, setProfileData ] = stateHooks.profile;
 
-
+useEffect(() => {
+	console.log("DID MOUNT");
+	setProfileData(user);
+},[])
 	
 	return (
 
 	  	<BrowserRouter>
-				<currentUserContext.Provider value={{ currentUser, setCurrentUser }} >
+
 					<AppContainer>
 						<NavigationBar />
 						<RoutesContainer />
 						<Footer />
 					</AppContainer>
-				</currentUserContext.Provider>
 
 		</BrowserRouter>
 

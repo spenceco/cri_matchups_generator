@@ -15,7 +15,6 @@ export const useUser = () => {
 	})
 	
 	useEffect(() => {
-		console.log('use effect');
 		if(!token) {
 			setUser(null);
 		} else {

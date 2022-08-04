@@ -4,8 +4,6 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { VscEyeClosed } from 'react-icons/vsc';
 import YesNo from './YesNo';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
 import ReactTooltip from 'react-tooltip';
 import { useStateHooks } from '../state/StateContext';
 
@@ -136,13 +134,15 @@ const saveToServer = async (id,token,people) => {
 const PersonViewer = () => {
 	
 	const [personBeingEdited,setPersonBeingEdited] = useState(false);
-
-	const user = useUser();
+	const stateHooks = useStateHooks();
+	const user = stateHooks.user;
 	const { id } = user;
-	const [token] = useToken();
+	const [token] = stateHooks.token;
 	
-	const { matchups,  removePerson, omitPerson, selectPerson } = useStateHooks().matchups;
+	const { matchups,  removePerson, omitPerson, selectPerson } = stateHooks.matchups;
 	const { people, selected } = matchups;
+
+	console.log(user);
 	
 	return ( people &&
 		<PersonViewerContainer>	

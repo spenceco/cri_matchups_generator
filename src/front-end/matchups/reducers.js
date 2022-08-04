@@ -1,29 +1,5 @@
 
 
-import { getPeople, getAllOtherPeople } from './selectors'
-
-/*
-export const isLoading = (state = false, action) => {
-	const { type } = action;
-	
-	switch (type) {
-		case LOAD_TODOS_IN_PROGRESS:
-			return true;
-		case LOAD_TODOS_SUCCESS:
-		case LOAD_TODOS_FAILURE:
-			return false;
-		default:
-			return state;
-	}
-};
-*/
-
-
-const initialState = {
-	selected: [],
-	date: null,
-	people: [],
-	};
 	
 	
 function chooseRandomArrayElements(array,count=1){
@@ -41,7 +17,7 @@ function chooseRandomArrayElements(array,count=1){
 
 
 
-export const matchupsReducer = (state = initialState, action) => {
+export const matchupsReducer = (state={}, action) => {
 	const { type, payload } = action;
 	
 	switch (type) {

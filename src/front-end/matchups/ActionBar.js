@@ -1,7 +1,6 @@
 
 
 import React, {  useState, createContext } from 'react';
-import { connect } from 'react-redux';
 import { saveMeeting, clearMatchups, resetDefaultMatchups, submitGroup, generateMatchups } from '../matchups/actions';
 import { GiSaveArrow } from 'react-icons/gi';
 import { HiDotsVertical } from 'react-icons/hi';

@@ -9,6 +9,11 @@ export const useToken = () => {
 		localStorage.setItem('token',newToken);
 		setTokenInternal(newToken);
 	}
+
+	const removeToken = () => {
+		localStorage.removeItem('token');
+		setTokenInternal(null);
+	}
 	
-	return [token, setToken];
+	return [token, setToken, removeToken];
 }

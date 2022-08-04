@@ -1,8 +1,6 @@
 import Modal from './Modal';
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
 import { useStateHooks } from '../state/StateContext';
 
 
@@ -75,13 +73,14 @@ const saveToServer = async (id,token,people) => {
 
 const UploadFromJson = ( { shouldShow, onRequestClose }  ) => {
 	
-	const user = useUser();
+	const stateHooks = useStateHooks();
+	const user = stateHooks.user;
 	const { id, email } = user;
-	const [token ,setToken] = useToken();
+	const [token ,setToken] = stateHooks.token;
 	
 	const [inputValue, setInputValue] = useState('');
 	
-	const { matchups, saveMeeting } = useStateHooks().matchups;
+	const { matchups, saveMeeting } = stateHooks.matchups;
 	const { people } = matchups;
 
 	

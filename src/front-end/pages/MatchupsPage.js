@@ -2,8 +2,6 @@ import SplitScreen from '../layout/SplitScreen';
 import PersonViewer from '../matchups/PersonViewer';
 import MatchedPairsBox from '../matchups/MatchedPairsBox';
 import React, { useEffect, Suspense } from 'react';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
 import ActionBar from '../matchups/ActionBar';
 import styled from 'styled-components';
 import { useStateHooks } from '../state/StateContext';
@@ -20,11 +18,11 @@ const Container = styled.div`
 
 
 const MatchupsPage = () => {
-	
-	const user = useUser();
+	const stateHooks = useStateHooks();
+	const user = stateHooks.user;
 	const { id } = user;
-	const [token , setToken] = useToken();
-	const { matchups,loadMatchups } = useStateHooks().matchups;
+	const [token , setToken] = stateHooks.token;
+	const { matchups,loadMatchups } = stateHooks.matchups;
 	const { people } = matchups;
 
 	useEffect(() => {

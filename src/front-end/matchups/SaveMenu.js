@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
 import { useStateHooks } from '../state/StateContext';
 
 
@@ -44,10 +42,11 @@ const ModalCloseButton = styled.button`
 
 const SaveMenu = ( { onRequestClose, shouldShow, inputValue, setInputValue }) => {
 
-	const user = useUser();
+	const stateHooks = useStateHooks();
+	const user = stateHooks.user;
 	const { id, email } = user;
-	const [token ,setToken] = useToken();
-	const { matchups, saveMeeting } = useStateHooks().matchups;
+	const [token ,setToken] = stateHooks.token;
+	const { matchups, saveMeeting } = stateHooks.matchups;
 	const { people } = matchups;
 
 	

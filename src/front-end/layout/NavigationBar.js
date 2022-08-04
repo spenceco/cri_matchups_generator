@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
-import { currentUserContext } from '../App';
-import { useUser } from '../../auth/useUser';
-import { useToken } from '../../auth/useToken';
+import { useState, useEffect } from 'react';
+import { useStateHooks } from '../state/StateContext';
 
 const Container = styled.div`
 	width: 100%;
@@ -32,28 +30,24 @@ const NavigationBarButton = styled.div`
 
 
 const NavigationBar = () => {
-	const user = useUser();
+	const stateHooks = useStateHooks();
+	const [ profileData, setProfileData, removeProfileData] = stateHooks.profile;
+	const [token,setToken,removeToken] = stateHooks.token;
+
 	const navigate = useNavigate();
-	const { currentUser, setCurrentUser } = useContext(currentUserContext);
     const logOut = () => {
-        localStorage.removeItem('token');
-        setCurrentUser(null);
+        removeToken();
+		removeProfileData();
         navigate('/login');
     }
    
-    useEffect(() => {
-	    console.log('navigate');
-	    console.log(user);
-	   // setCurrentUser(user);
-    },[navigate]);
-    //console.log(currentUser);
-	
+
 
 	return (
 		<Container>
 			<Link to="/"><NavigationBarButton>HOME</NavigationBarButton></Link>
 			<Link to="/about"><NavigationBarButton>ABOUT</NavigationBarButton></Link>
-			{currentUser ? <NavigationBarButton onClick={logOut}>LOG OUT ({currentUser.email})</NavigationBarButton> : 
+			{ profileData && Object.keys(profileData).length ? <NavigationBarButton onClick={logOut}>LOG OUT ({profileData.email})</NavigationBarButton> : 
 					<Link to="/login"><NavigationBarButton>LOG IN</NavigationBarButton></Link>
 			}	
 	

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useToken } from '../../auth/useToken';
+import { useStateHooks } from '../state/StateContext';
 import { EmailVerificationSuccess } from './EmailVerificationSuccess';
 import { EmailVerificationFail } from './EmailVerificationFail';
 
@@ -9,7 +9,7 @@ import { EmailVerificationFail } from './EmailVerificationFail';
 const EmailVerificationLandingPage = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSuccess, setIsSuccess] = useState(false);
-	const [,setToken] = useToken();
+	const [,setToken] = useStateHooks().token;
 	const { verificationString } = useParams();
 	
 	

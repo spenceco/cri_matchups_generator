@@ -7,12 +7,6 @@ const UserInfoPage = () => {
 
     const stateHooks = useStateHooks();
     const user = useUser();
-    const [ profile, setProfileData ] = stateHooks.profile;
-
-    useEffect(() => {
-        console.log(user);
-        setProfileData(user);
-    },[])
 
     return (
         <div className="content-container">

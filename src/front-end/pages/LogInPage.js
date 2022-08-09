@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useStateHooks } from '../state/StateContext';
 import { useQueryParams } from '../../util/useQueryParams';
 import styled from 'styled-components';
-import { useProfileData } from '../../auth/useProfileData';
 
 const GoogleSignInButton = styled.img`
 	width: 75%;
@@ -20,19 +19,18 @@ const ButtonContainer = styled.div`
 export const LogInPage = () => {
 	const stateHooks = useStateHooks();
 	const [,setToken] = stateHooks.token;
+	const [user,,login] = stateHooks.user;
 	const [errorMessage,setErrorMessage] = useState('');
 	const [emailValue,setEmailValue] = useState('');
 	const [passwordValue,setPasswordValue] = useState('');
 	const [googleOauthUrl, setGoogleOauthUrl] = useState('');
 	const { token: oauthToken } = useQueryParams();
-	const user = stateHooks.user;
-	const [ profileData, setProfileData ] = stateHooks.profile;
 	
 	const navigate = useNavigate();
 	
 	useEffect(() => {
 		if (oauthToken) {
-			setToken(oauthToken);
+			login(oauthToken);
 
 			navigate('/user');
 		}

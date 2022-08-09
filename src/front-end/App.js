@@ -28,13 +28,7 @@ const BackgroundImage = styled.img`
 const App = () => {
 	
 const stateHooks = useStateHooks();
-const user = stateHooks.user;
-const [ profile, setProfileData ] = stateHooks.profile;
-
-useEffect(() => {
-	console.log("DID MOUNT");
-	setProfileData(user);
-},[])
+const [user] = stateHooks.user;
 	
 	return (
 

@@ -25,29 +25,21 @@ const NavigationBarButton = styled.div`
 	color: white;
 `;
 
-
-
-
-
 const NavigationBar = () => {
 	const stateHooks = useStateHooks();
-	const [ profileData, setProfileData, removeProfileData] = stateHooks.profile;
-	const [token,setToken,removeToken] = stateHooks.token;
-
+	const [ user, logout ] = stateHooks.user;
 	const navigate = useNavigate();
+
     const logOut = () => {
-        removeToken();
-		removeProfileData();
+		logout();
         navigate('/login');
     }
-   
-
-
+	
 	return (
 		<Container>
 			<Link to="/"><NavigationBarButton>HOME</NavigationBarButton></Link>
 			<Link to="/about"><NavigationBarButton>ABOUT</NavigationBarButton></Link>
-			{ profileData && Object.keys(profileData).length ? <NavigationBarButton onClick={logOut}>LOG OUT ({profileData.email})</NavigationBarButton> : 
+			{ user && Object.keys(user).length ? <NavigationBarButton onClick={logOut}>LOG OUT ({user.email})</NavigationBarButton> : 
 					<Link to="/login"><NavigationBarButton>LOG IN</NavigationBarButton></Link>
 			}	
 	

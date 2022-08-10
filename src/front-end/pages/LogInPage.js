@@ -3,22 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useStateHooks } from '../state/StateContext';
 import { useQueryParams } from '../../util/useQueryParams';
-import styled from 'styled-components';
 
-const GoogleSignInButton = styled.img`
-	width: 75%;
 
-`;
+const buttonContainerStyle = {
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+}
 
-const ButtonContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-`;
 
 export const LogInPage = () => {
 	const stateHooks = useStateHooks();
-	const [,setToken] = stateHooks.token;
 	const [user,,login] = stateHooks.user;
 	const [errorMessage,setErrorMessage] = useState('');
 	const [emailValue,setEmailValue] = useState('');
@@ -31,23 +26,20 @@ export const LogInPage = () => {
 	useEffect(() => {
 		if (oauthToken) {
 			login(oauthToken);
-
 			navigate('/user');
 		}
-	},[oauthToken, setToken, navigate]);
-	
-	useEffect(() => {
-		const loadOauthUrl = async () => {
-			try {
-				const response = await axios.get('/auth/google/url');
-				const { url } = response.data;
-				setGoogleOauthUrl(url);
-			} catch (e) {
-				console.log(e);
+		else{
+			const loadOauthUrl = async () => {
+				try {
+					const response = await axios.get('/auth/google/url');
+					const { url } = response.data;
+					setGoogleOauthUrl(url);
+				} catch (e) {
+					console.log(e);
+				}
 			}
+			loadOauthUrl();
 		}
-		
-		loadOauthUrl();
 	},[])
 	
 		const onLogInClicked = async () => {
@@ -57,7 +49,7 @@ export const LogInPage = () => {
 					password: passwordValue,
 				});
 				const { token } = response.data;
-				setToken(token);
+				login(token);
 				navigate('/');
 			} catch (e) {
 				setErrorMessage(e.message);
@@ -79,7 +71,7 @@ export const LogInPage = () => {
 				placeholder="password"
 				type="password" />
 			<hr />
-			<ButtonContainer>
+			<div style={buttonContainerStyle}>
 				<button
 					disabled={!emailValue || !passwordValue} 
 					onClick={onLogInClicked}>Log In</button>
@@ -87,12 +79,13 @@ export const LogInPage = () => {
 					onClick={() => navigate('/forgot-password')}>Forgot your password?</button>
 				<button
 					onClick={() => navigate('/signup')}>Dont have an account? Sign up</button>
-				<GoogleSignInButton
+				<img
 					disabled={!googleOauthUrl}
 					src="/public/images/btn_google_signin_light_focus_web@2x.png"
 					onClick={() => { window.location.href = googleOauthUrl }}
+					style={{width:'75%'}}
 				/>
-			</ButtonContainer>
+			</div>
 
 		</div>
 	)

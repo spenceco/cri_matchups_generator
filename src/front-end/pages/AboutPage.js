@@ -1,51 +1,38 @@
-import styled from 'styled-components';
-
-const Container = styled.div`
-	margin-top: 5%;
-	color: white;
-	display: flex;
-	background-color: none;
-	width: 100%;
-	justify-content: center;
-`;
-
-const MainPanel = styled.div`
-	width: 50%;
-	border-radius: 8px;
-	background-color: rgba(0,0,0,0.6);
-	color: #white;
-	padding: 10px;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-top: 8%;
-`;
-
-const RequestResumeButton = styled.button`
-	width: auto;
-	margin-top: 10px;
-`;
-
-const HeaderText = styled.h2`
-	margin: 5px 5px;
-`;
-
-const Text = styled.div`
-	font-size: 20px;
-	text-align: center;
-`;
+import axios from 'axios';
+import Modal from '../matchups/Modal';
+import { useState } from 'react';
 
 
-const HomePage = () => {
+
+const onSignUpClicked = async (emailValue) => {
+	try{
+		const response = await axios.post('/api/request-resume', {
+			email: emailValue,
+		});
+			alert("Request sent");
+	} catch(e) {
+		alert("Something went wrong");
+	}
+
+}
+
+
+const AboutPage = () => {
+	const [emailValue,setEmailValue] = useState("");
 	return (
-		<Container>
-			<MainPanel>
-				<HeaderText>About Me</HeaderText>
-				<Text>I am a self-taught software developer with more than 15 years experience in coding. I enjoy creating digital solutions to real problems and challenges, leveraging the massive potential of the computer to make life simpler and more enriching. I also have an interest in chess, music, mixology, and gardening.</Text>
-				<RequestResumeButton>Request Resume</RequestResumeButton>
-			</MainPanel>
-		</Container>
+		<>
+			<div className="panel">
+				<h2>About Me</h2>
+				<p>I am a self-taught software developer, possessing an interest in various forms of code since an early age. I enjoy creating digital solutions to real problems and challenges, leveraging the massive potential of the computer to make life simpler and more enriching. I also have an interest in chess, music, mixology, and gardening.</p>
+				<br />
+				<Modal buttonName="Request Resume">
+					<p>Please enter an email address:</p>
+					<input type='text' value={emailValue} placeholder="someone@gmail.com" onChange={e => setEmailValue(e.target.value)} />
+					<button onClick={() => onSignUpClicked(emailValue) }>Send Request</button>
+				</Modal>
+			</div>
+		</>
 	)
 }
 
-export default HomePage;
+export default AboutPage;

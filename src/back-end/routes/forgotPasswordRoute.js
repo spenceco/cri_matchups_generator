@@ -21,7 +21,7 @@ export const forgotPasswordRoute = {
 					subject: 'Password Reset',
 					text: `
 						To reset your password, click this link:
-						http://10.0.1.69/reset-password/${passwordResetCode}
+						http://spence.codes/reset-password/${passwordResetCode}
 					`
 				})
 			} catch (e) {

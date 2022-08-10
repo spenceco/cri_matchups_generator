@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 20px;
+  color: white;
 }
 
 code {
@@ -24,7 +26,6 @@ button, input {
     border-radius: 8px;
     min-height: 20px;
     display: block;
-    font-size: 16px;
     padding: 5px;
     color: white;
     width: 100%;
@@ -88,6 +89,18 @@ button {
     margin-bottom: 8px;
     padding: 16px;
     text-align: center;
+}
+
+.panel {
+    width: 30%;
+	border-radius: 8px;
+	background-color: rgba(0,0,0,0.6);
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 10% auto auto auto;
+	text-align: center;
 }
 
 a:link { text-decoration: none; }

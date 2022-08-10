@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "builddev": "npx webpack-dev-server --mode development",
-    "serverdev": "npx nodemon --exec babel-node -r dotenv/config src/back-end/server.js",
+    "serverdev": "npx nodemon --ignore 'front-end/' --exec babel-node -r dotenv/config src/back-end/server.js",
     "dev": "concurrently \"npm run builddev\" \"npm run serverdev\"",
     "build": "npx webpack --mode development",
     "test": "mocha \"src/**/*.test.js\" --require @babel/register --recursive"

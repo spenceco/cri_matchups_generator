@@ -8,7 +8,6 @@ export const StateProvider = ({ children }) => {
   const stateHooks = {
     matchups: useMatchups(),
     user: useUser(),
-    token: useToken(),
   };
   return (
     <StateContext.Provider value={stateHooks}>

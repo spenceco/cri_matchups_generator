@@ -30,5 +30,5 @@ export const useUser = () => {
 		}
 	}, [token]);
 	
-	return [user,logout, login];
+	return [user,logout,login];
 }

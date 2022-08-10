@@ -7,6 +7,7 @@ import { forgotPasswordRoute } from './forgotPasswordRoute';
 import { resetPasswordRoute } from './resetPasswordRoute';
 import { getGoogleOauthUrlRoute } from './getGoogleOauthUrlRoute';
 import { googleOauthCallbackRoute } from './googleOauthCallbackRoute';
+import { requestResumeRoute } from './requestResumeRoute';
 
 const routes = [
 	signUpRoute,
@@ -20,6 +21,7 @@ const routes = [
 	resetPasswordRoute,
 	getGoogleOauthUrlRoute,
 	googleOauthCallbackRoute,
+	requestResumeRoute,
 ];
 
 export default routes;

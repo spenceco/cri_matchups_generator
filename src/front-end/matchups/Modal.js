@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import React from 'react';
-
+import { TiDeleteOutline } from 'react-icons/ti';
 
 const ModalBackground = styled.div`
 	position: fixed;
@@ -15,11 +15,14 @@ const ModalBackground = styled.div`
 `;
 
 const ModalBody = styled.div`
-	background-color: white;
+    background: #202030;
 	margin: 10% auto;
 	padding: 20px;
-	width: 50%;
-	color: black;
+	width: 25%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	border-radius: 8px;
 `;
 
 const ModalCloseButton = styled.button`
@@ -50,7 +53,13 @@ const Modal = ({ buttonName="Show Modal", children }) => {
 		{shouldShow && (
 			<ModalBackground onClick={() => setShouldShow(false)}>
 				<ModalBody onClick={e => e.stopPropagation()}>
-					<ModalCloseButton onClick={() => setShouldShow(false)}>x</ModalCloseButton>
+				<TiDeleteOutline onClick={() => setShouldShow(false)}
+				style={ {
+					alignSelf:'flex-end', 
+					color: 'white',
+					width: '25px',
+					height: 'auto',
+					} }/>
 		    		{children}
 				</ModalBody>
 			</ModalBackground>

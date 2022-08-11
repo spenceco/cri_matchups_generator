@@ -6,6 +6,7 @@ import { VscEyeClosed } from 'react-icons/vsc';
 import YesNo from '../shared-components/YesNo';
 import ReactTooltip from 'react-tooltip';
 import { useStateHooks } from '../state/StateContext';
+import RemovePerson from './removePerson';
 
 const AttendingPersonList = styled.div`
     border-radius: 8px;
@@ -105,10 +106,8 @@ const ShowRemainingButton = styled.button`
 
 const PersonViewer = ({ saveToServer }) => {
 	
-	const [personBeingEdited,setPersonBeingEdited] = useState(false);
+	const [ personToRemove, setPersonToRemove ] = useState(null);
 	const stateHooks = useStateHooks();
-	const { user, token } = stateHooks.user;
-	const { id } = user;
 	const { matchups,  removePerson, omitPerson, selectPerson } = stateHooks.matchups;
 	const { people, selected } = matchups;
 	const [hoverElement, setHoverElement] = useState(false);
@@ -118,6 +117,9 @@ const PersonViewer = ({ saveToServer }) => {
 	
 	return ( people &&
 		<PersonViewerContainer>	
+		<RemovePerson 	saveToServer={saveToServer} 
+						person={personToRemove}
+						onRequestClose={() => setPersonToRemove(null)} />
 		<MeetingContainer>
 			<AttendingPersonList>
 				<HeaderContainer>
@@ -154,12 +156,7 @@ const PersonViewer = ({ saveToServer }) => {
 								omitPerson(person);
 						}} />
 						
-						<YesNo element={<RiDeleteBin6Line data-tip data-for="removeTip" style={ { width: '25px', height: 'auto' } }  /> } task={ () => {
-							removePerson(person);
-							saveToServer();
-						} }>
-							<span>Are you sure you want to remove {person.name} from the team?</span>
-						</YesNo>
+						<RiDeleteBin6Line data-tip data-for="removeTip" style={ { width: '25px', height: 'auto' } }  onClick={() => setPersonToRemove(person)}/>
 
 
 				      <ReactTooltip id="omitTip" place="top" effect="solid">

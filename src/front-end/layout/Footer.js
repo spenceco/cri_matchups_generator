@@ -19,8 +19,8 @@ const TextContainer = styled.div`
 `;
 
 const TextStyle = styled.div`
-	color: white;
 	margin: auto;
+	font-size: 16px;
 	font-weight: bold;
 `;
 
@@ -30,7 +30,6 @@ const TextStyle = styled.div`
 const PipeContainer = styled.span`
 	margin-right: 30px;
 	margin-left: 30px;
-	color: white;
 	font-weight: bold;
 `;
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import useMatchups  from "../matchups/useMatchups";
+import useMatchups  from "../matchups/state/useMatchups";
 import { useUser } from "../../auth/useUser";
 import { useToken } from "../../auth/useToken";
 
@@ -8,6 +8,7 @@ export const StateProvider = ({ children }) => {
   const stateHooks = {
     matchups: useMatchups(),
     user: useUser(),
+    token: useToken(),
   };
   return (
     <StateContext.Provider value={stateHooks}>

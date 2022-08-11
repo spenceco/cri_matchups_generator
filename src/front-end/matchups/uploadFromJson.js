@@ -1,4 +1,4 @@
-import Modal from './Modal';
+import Modal from '../shared-components/Modal';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useStateHooks } from '../state/StateContext';
@@ -74,9 +74,8 @@ const saveToServer = async (id,token,people) => {
 const UploadFromJson = ( { shouldShow, onRequestClose }  ) => {
 	
 	const stateHooks = useStateHooks();
-	const user = stateHooks.user;
+	const { user, token, setToken } = stateHooks.user;
 	const { id, email } = user;
-	const [token ,setToken] = stateHooks.token;
 	
 	const [inputValue, setInputValue] = useState('');
 	

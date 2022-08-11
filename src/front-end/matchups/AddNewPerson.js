@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useStateHooks } from "../state/StateContext";
 
@@ -42,10 +42,19 @@ const ModalCloseButton = styled.button`
 
 
 
-const AddNewPerson = ( { shouldShow, onRequestClose}  ) => {
+const AddNewPerson = ( { shouldShow, onRequestClose, saveToServer}  ) => {
 	
 	const [inputValue, setInputValue] = useState('');
-	const { createPerson } = useStateHooks().matchups;
+	const stateHooks = useStateHooks();
+	const { matchups: people, createPerson } = stateHooks.matchups;
+
+	useEffect(() => {
+		console.log("people changed");
+		if(shouldShow){
+			saveToServer();
+			onRequestClose();
+		}
+	},[people]);
 	
 	return shouldShow && (<>
 		<ModalBackground onClick={() => onRequestClose()}>
@@ -69,6 +78,7 @@ const AddNewPerson = ( { shouldShow, onRequestClose}  ) => {
 					<button onClick={() => {
 						createPerson(inputValue);
 						setInputValue('');
+						//onRequestClose();
 					}}>Add New</button>
 				</>
 			}

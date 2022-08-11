@@ -28,7 +28,7 @@ const BackgroundImage = styled.img`
 const App = () => {
 	
 const stateHooks = useStateHooks();
-const [user] = stateHooks.user;
+const {user} = stateHooks.user;
 	
 	return (
 

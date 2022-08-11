@@ -1,7 +1,4 @@
 
-
-	
-	
 function chooseRandomArrayElements(array,count=1){
 	var result = [];
 	while(result.length < count){
@@ -11,11 +8,6 @@ function chooseRandomArrayElements(array,count=1){
 	}
 	return result;
 }
-
-
-
-
-
 
 export const matchupsReducer = (state={}, action) => {
 	const { type, payload } = action;
@@ -35,7 +27,6 @@ export const matchupsReducer = (state={}, action) => {
 		
 		case 'LOAD_MATCHUPS': {
 			const newState = { ...state, people: payload };
-			console.log(newState);
 			return newState;
 		}
 		
@@ -54,10 +45,12 @@ export const matchupsReducer = (state={}, action) => {
 				matchedWith: [],
 				alreadyMet: [],
 			};
-			return {
+			const newState = {
 				...state,
 				people: state.people.concat(person),
-			}
+			};
+			console.log(newState);
+			return newState;
 		}
 
 		case 'REMOVE_PERSON': {
@@ -89,7 +82,6 @@ export const matchupsReducer = (state={}, action) => {
 				};
 		}
 		
-		
 		case 'SUBMIT_GROUP': {
 			if(!state.selected)
 				return state;
@@ -100,8 +92,7 @@ export const matchupsReducer = (state={}, action) => {
 							if(group.some(member => member.name === person.name))
 								return { ...person, matchedWith: group };
 							else return person;
-							}),
-						
+							}),	
 			}
 			
 		}
@@ -129,8 +120,6 @@ export const matchupsReducer = (state={}, action) => {
 		
 		case 'DELETE_SAVED_MATCHUP': {
 			const { first_person, second_person } = payload;
-			//console.log(payload);
-			//console.log(first_person + "/" + second_person);
 			return {
 				...state,
 				people: state.people.map(person => {
@@ -170,7 +159,6 @@ export const matchupsReducer = (state={}, action) => {
 				  return 0
 				}//sort by alreadyMet descending
 				
-				
 				const unmatched_people = current_state.people.filter(person => {
 					if(!person.matchedWith.length && !person.omit)
 						return true;
@@ -178,21 +166,11 @@ export const matchupsReducer = (state={}, action) => {
 				});
 				
 				if(!unmatched_people.length)
-				{
-					//console.log("no unmatched people");
 					return [];
-				}
-					
-				const unmatched_people_sorted = unmatched_people.sort(objectComparisonCallback);
-				//console.log(unmatched_people_sorted);
-				
 
+				const unmatched_people_sorted = unmatched_people.sort(objectComparisonCallback);
 				const isOdd = unmatched_people_sorted.length % 2 == 0 ? false : true;
-				
-				
 				const candidatesForGroup = unmatched_people_sorted.map( unmatched_person => {
-					
-					
 					const potentialMatches = unmatched_people_sorted.filter(person => {
 						if(person.name == unmatched_person.name)
 							return false;
@@ -209,27 +187,20 @@ export const matchupsReducer = (state={}, action) => {
 
 				});
 				if(!candidatesForGroup.length)
-				{
-					//console.log("no candidates?");
 					return [];
-				}	
-				//console.log(candidatesForGroup);
+
 				const result = chooseRandomArrayElements(candidatesForGroup.filter(candidate => candidate.length))[0]
-				//const isOdd = unmatched_people.length % 2 == 0 ? false : true;
 				if(isOdd){
 					const unmatched_people_reversed = [...unmatched_people_sorted].reverse();
-					//console.log(unmatched_people_reversed);
 					const potential_extra_partners = unmatched_people_reversed.filter(unmatched_person => {
 						if(result.find(grouped_person => grouped_person.name == unmatched_person.name))
 							return false;
 						return true;
 					})
-					//console.log(potential_extra_partners)
 					if(potential_extra_partners.length)
 						result.push(chooseRandomArrayElements(potential_extra_partners)[0]);
 				}
-					
-				//console.log(result);
+
 				return result;
 				
 			};
@@ -292,7 +263,6 @@ export const matchupsReducer = (state={}, action) => {
 					});
 					const randomPartner = potentialMatches[Math.floor(Math.random()*potentialMatches.length)]
 					already_picked.push(randomPartner.name);
-					//console.log(already_picked)
 					return {...unmatched_person,matchedWith:[unmatched_person,randomPartner	]};
 				
 				});
@@ -310,9 +280,7 @@ export const matchupsReducer = (state={}, action) => {
 					}),
 				}
 			}
-			
-
-			
+					
 			if(state.hasOwnProperty('people') && state.people.find(person => person.alreadyMet.length === state.people.length-1))
 			{
 				alert("complete! begin a new season.");
@@ -320,12 +288,8 @@ export const matchupsReducer = (state={}, action) => {
 			}
 			var new_state = state;
 			var times_shuffled = 0;
-			
-				
-			//console.log("start while");
+
 			while(times_shuffled < 100){
-			//for(let i=0;i<100;i++){
-				//const unmatched_people = new_state.people.filter(person => !person.matchedWith.length);
 				const unmatched_people = new_state.people.filter(person => {
 					if(!person.matchedWith.length && !person.omit)
 						return true;
@@ -333,32 +297,19 @@ export const matchupsReducer = (state={}, action) => {
 				});
 				if(!unmatched_people.length)
 					break;
-
-
 				const group = pickGroupMembers(new_state);
-				if(group == undefined || !group.length){//cannot read properties of undefined -- fix this
-					//console.log("no group");
+				if(group == undefined || !group.length){
 					const swings = getSwing(new_state);	
-					//console.log(swings);
 					
 					const viableSwing = swings.find(swing => swing.peopleWithSwingablePartner.length);
 					if(!viableSwing){
-						//console.log("no viable swings. attempting shuffle");
 						new_state = shuffle(new_state);
-						//break;
 						++times_shuffled;
-						//i=0;
 					}
 					else {
-						//console.log(viableSwing)
-						
 						const personNeedingPartner = viableSwing.first_team_member;
 						const peopleWithSwingablePartner = viableSwing.peopleWithSwingablePartner;
 						const randomPartner = peopleWithSwingablePartner[Math.floor(Math.random()*peopleWithSwingablePartner.length)]
-						
-						//console.log("needingpartner: "+personNeedingPartner.name);
-						//console.log("peopleWithSwingablePartner: "+peopleWithSwingablePartner.name);
-					
 							new_state = {
 								...new_state,
 								people: new_state.people.map(person => {
@@ -379,8 +330,7 @@ export const matchupsReducer = (state={}, action) => {
 			
 				
 				else {
-					//console.log(group);
-					//console.log(new_state);
+
 					new_state = {
 						...new_state,
 						people: new_state.people.map(person => {

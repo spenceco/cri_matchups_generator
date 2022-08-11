@@ -1,4 +1,4 @@
-import Modal from './Modal';
+import Modal from '../shared-components/Modal';
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import { useStateHooks } from '../state/StateContext';

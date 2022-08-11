@@ -41,11 +41,10 @@ const ModalCloseButton = styled.button`
 
 
 const SaveMenu = ( { onRequestClose, shouldShow, inputValue, setInputValue }) => {
-
+//TODO: reconfigure this to use the save function built into the MatchupsPage component
 	const stateHooks = useStateHooks();
-	const user = stateHooks.user;
+	const { user, token, setToken } = stateHooks.user;
 	const { id, email } = user;
-	const [token ,setToken] = stateHooks.token;
 	const { matchups, saveMeeting } = stateHooks.matchups;
 	const { people } = matchups;
 

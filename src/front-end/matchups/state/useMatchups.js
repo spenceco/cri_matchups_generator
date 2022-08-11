@@ -1,5 +1,5 @@
-import { matchupsReducer } from "../matchups/reducers.js";
-import matchupsActions from "../matchups/actions.js";
+import { matchupsReducer } from "./reducer.js";
+import matchupsActions from "./actions.js";
 import { useReducer } from 'react';
 
 const initialState = {

@@ -27,11 +27,11 @@ const NavigationBarButton = styled.div`
 
 const NavigationBar = () => {
 	const stateHooks = useStateHooks();
-	const [ user, logout ] = stateHooks.user;
+	const { user, removeToken } = stateHooks.user;
 	const navigate = useNavigate();
 
     const logOut = () => {
-		logout();
+		removeToken();
         navigate('/login');
     }
 	

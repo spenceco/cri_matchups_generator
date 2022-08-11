@@ -1,6 +1,6 @@
-import Modal from './Modal';
+import Modal from '../shared-components/Modal';
 import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson } from './actions';
+import { resetDefaultMatchups, createPerson } from './state/actions';
 import styled from 'styled-components';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { useStateHooks } from '../state/StateContext';

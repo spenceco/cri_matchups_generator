@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useStateHooks } from '../state/StateContext';
@@ -14,7 +14,7 @@ const buttonContainerStyle = {
 
 export const LogInPage = () => {
 	const stateHooks = useStateHooks();
-	const [user,,login] = stateHooks.user;
+	const { user,setToken } = stateHooks.user;
 	const [errorMessage,setErrorMessage] = useState('');
 	const [emailValue,setEmailValue] = useState('');
 	const [passwordValue,setPasswordValue] = useState('');
@@ -25,7 +25,7 @@ export const LogInPage = () => {
 	
 	useEffect(() => {
 		if (oauthToken) {
-			login(oauthToken);
+			setToken(oauthToken);
 			navigate('/user');
 		}
 		else{
@@ -49,7 +49,7 @@ export const LogInPage = () => {
 					password: passwordValue,
 				});
 				const { token } = response.data;
-				login(token);
+				setToken(token);
 				navigate('/');
 			} catch (e) {
 				setErrorMessage(e.message);
@@ -83,7 +83,7 @@ export const LogInPage = () => {
 					disabled={!googleOauthUrl}
 					src="/public/images/btn_google_signin_light_focus_web@2x.png"
 					onClick={() => { window.location.href = googleOauthUrl }}
-					style={{width:'75%'}}
+					style={{width:'60%'}}
 				/>
 			</div>
 

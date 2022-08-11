@@ -14,13 +14,7 @@ export const useUser = () => {
 		return getPayloadFromToken(token);
 	})
 
-	const logout = () => {
-		removeToken();
-	}
 
-	const login = (newToken) => {
-		setToken(newToken);
-	}
 
 	useEffect(() => {
 		if(!token) {
@@ -30,5 +24,5 @@ export const useUser = () => {
 		}
 	}, [token]);
 	
-	return [user,logout,login];
+	return {user,token,removeToken,setToken};
 }

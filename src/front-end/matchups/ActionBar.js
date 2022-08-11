@@ -1,7 +1,7 @@
 
 
 import React, {  useState, createContext } from 'react';
-import { saveMeeting, clearMatchups, resetDefaultMatchups, submitGroup, generateMatchups } from '../matchups/actions';
+import { saveMeeting, clearMatchups, resetDefaultMatchups, submitGroup, generateMatchups } from './state/actions';
 import { GiSaveArrow } from 'react-icons/gi';
 import { HiDotsVertical } from 'react-icons/hi';
 import { BiEraser } from 'react-icons/bi/';
@@ -13,7 +13,7 @@ import ResetMatchups from '../matchups/ResetMatchups';
 import ViewPreviousMeetings from '../matchups/viewPreviousMeetings';
 import UploadFromJson from '../matchups/uploadFromJson';
 import ShowRules from '../matchups/ShowRules';
-import YesNo from './YesNo';
+import YesNo from '../shared-components/YesNo';
 
 import { useStateHooks } from "../state/StateContext";
 import { MdOutlineAutoAwesome, MdSend } from 'react-icons/md';
@@ -22,7 +22,7 @@ import ReactTooltip from 'react-tooltip';
 
 export const ActionBarContext = createContext();
 
-const ActionBar = ( { onSaveClicked, onClearClicked, onSubmitGroupPressed, onAutoPressed }) => {
+const ActionBar = ( { onSaveClicked, onClearClicked, onSubmitGroupPressed, onAutoPressed, saveToServer }) => {
 
 	const { matchups, resetDefaultMatchups, saveMeeting, clearMatchups, generateMatchups, submitGroup } = useStateHooks().matchups;
 	const { date, selected, people } = matchups;
@@ -52,7 +52,7 @@ const ActionBar = ( { onSaveClicked, onClearClicked, onSubmitGroupPressed, onAut
 	const barStyle = {
 		backgroundColor: '#39304A',
 		width: '100%',
-		height: '50px',
+		height: '60px',
 		display: 'flex',
 		justifyContent: 'flex-start',
 	};
@@ -150,7 +150,7 @@ const ActionBar = ( { onSaveClicked, onClearClicked, onSubmitGroupPressed, onAut
 				<SettingsMenu shouldShow={shouldShowSettingsMenu} onRequestClose={() => setShouldShowSettingsMenu(false)} />
 				<ShowRemainingMatchups shouldShow={shouldShowRemainingMatchups} onRequestClose={() => setShouldShowRemainingMatchups(false)} />
 				<SaveMenu shouldShow={shouldShowSaveMenu} onRequestClose={() => setShouldShowSaveMenu(false)} setInputValue={setInputValue} inputValue={inputValue} />
-				<AddNewPerson shouldShow={shouldShowAddNewPerson} onRequestClose={() => setShouldShowAddNewPerson(false)} />
+				<AddNewPerson shouldShow={shouldShowAddNewPerson} onRequestClose={() => setShouldShowAddNewPerson(false)} saveToServer={saveToServer}/>
 				<ResetMatchups shouldShow={shouldShowResetMatchups} onRequestClose={() => setShouldShowResetMatchups(false)} />
 				<ViewPreviousMeetings shouldShow={shouldShowViewPreviousMeetings} onRequestClose={() => setShouldShowViewPreviousMeetings(false)} />
 				<UploadFromJson shouldShow={shouldShowUploadFromJson} onRequestClose={() => setShouldShowUploadFromJson(false)}  />

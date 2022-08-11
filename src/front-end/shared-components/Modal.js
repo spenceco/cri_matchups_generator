@@ -38,7 +38,6 @@ const ModalOpenButton = styled.button`
     border-radius: 8px;
     min-height: 20px;
     display: block;
-    font-size: 16px;
     padding: 8px;
     color: white;
     border-color: #635c51;

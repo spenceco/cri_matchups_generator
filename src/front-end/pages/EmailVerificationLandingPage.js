@@ -9,7 +9,7 @@ import { EmailVerificationFail } from './EmailVerificationFail';
 const EmailVerificationLandingPage = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [isSuccess, setIsSuccess] = useState(false);
-	const [,setToken] = useStateHooks().token;
+	const { setToken } = useStateHooks().user;
 	const { verificationString } = useParams();
 	
 	

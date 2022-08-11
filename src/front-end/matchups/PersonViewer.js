@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import { MdOutlineModeEditOutline } from 'react-icons/md';
 import { VscEyeClosed } from 'react-icons/vsc';
-import YesNo from './YesNo';
+import YesNo from '../shared-components/YesNo';
 import ReactTooltip from 'react-tooltip';
 import { useStateHooks } from '../state/StateContext';
 
@@ -21,7 +21,7 @@ const AttendingPersonList = styled.div`
 
 
 const AttendeeContainer = styled.div`
-    background: #202030;
+    background: ${props => props.hovering ? '#635C51' : '#202030'};
     cursor: pointer;
     font-size: 20px;
     color: ${props => props.person && props.person.omit ? '#bbbbbb' : 'white'};
@@ -99,50 +99,22 @@ const AttendeeOptionsContainer = styled.div`
 const ShowRemainingButton = styled.button`
 `;
 
-const saveToServer = async (id,token,people) => {
-	
-	console.log(people);
-
-	try{
-		const fetchData = async () => {
-		 	const rawResponse = await fetch(`/api/matchups/save/${id}`,
-		 	{
-			    method: 'POST',
-			    headers: {
-			      'Accept': 'application/json',
-			      'Content-Type': 'application/json',
-			      'Authorization': `Bearer ${token}`,
-			    },
-			    body: JSON.stringify({ people:people }),
-			});
-			const body = await rawResponse.json();
-			if(rawResponse.status != 200)
-				alert('Error connecting to database.');
-	
-
-		};
-		fetchData();
-				
-	} catch(e) {
-		console.log({"error":e});
-	}
-	
-}
 
 
 
-const PersonViewer = () => {
+
+const PersonViewer = ({ saveToServer }) => {
 	
 	const [personBeingEdited,setPersonBeingEdited] = useState(false);
 	const stateHooks = useStateHooks();
-	const user = stateHooks.user;
+	const { user, token } = stateHooks.user;
 	const { id } = user;
-	const [token] = stateHooks.token;
-	
 	const { matchups,  removePerson, omitPerson, selectPerson } = stateHooks.matchups;
 	const { people, selected } = matchups;
+	const [hoverElement, setHoverElement] = useState(false);
 
-	console.log(user);
+	const handleMouseOver = (key) => setHoverElement(key);
+	const handleMouseOut = () => setHoverElement(null);
 	
 	return ( people &&
 		<PersonViewerContainer>	
@@ -158,16 +130,19 @@ const PersonViewer = () => {
 				<AttendeesContainer>
 					{
 					people.map(person =>  person.matchedWith.length ? null : <AttendeeContainer
-					person = {person} 
-					key = {person.name}
-					selected = {selected}
-					onClick={() => {
-						if(person.omit)
-							alert("This person is currently omitted");
-						else
-							selectPerson(person);
-					}
-					}>
+						person = {person} 
+						key = {person.name}
+						selected = {selected}
+						hovering = {person.name == hoverElement ? true : false}
+						onClick={() => {
+							if(person.omit)
+								alert("This person is currently omitted");
+							else
+								selectPerson(person);
+						}}
+						onMouseOver={() => handleMouseOver(person.name)} 
+						onMouseOut={handleMouseOut}
+					>
 					<PersonName>
 						{person.name}({person.alreadyMet.length})
 					</PersonName>
@@ -181,9 +156,7 @@ const PersonViewer = () => {
 						
 						<YesNo element={<RiDeleteBin6Line data-tip data-for="removeTip" style={ { width: '25px', height: 'auto' } }  /> } task={ () => {
 							removePerson(person);
-							saveToServer(id, token, people.filter(p => p.name !== person.name));
-							//saveToServer hook
-							alert('saved');
+							saveToServer();
 						} }>
 							<span>Are you sure you want to remove {person.name} from the team?</span>
 						</YesNo>

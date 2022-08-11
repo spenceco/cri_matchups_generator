@@ -1,6 +1,5 @@
-import Modal from './Modal';
-import { connect } from 'react-redux';
-import { resetDefaultMatchups, createPerson } from './actions';
+import Modal from '../shared-components/Modal';
+import { resetDefaultMatchups, createPerson } from './state/actions';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useStateHooks } from '../state/StateContext';

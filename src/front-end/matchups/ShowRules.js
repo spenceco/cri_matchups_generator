@@ -1,4 +1,4 @@
-import Modal from './Modal';
+import Modal from '../shared-components/Modal';
 import styled from 'styled-components';
 import { TiDeleteOutline } from 'react-icons/ti';
 
